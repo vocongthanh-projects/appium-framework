@@ -5,9 +5,12 @@ import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.touch.offset.PointOption;
 import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.PointerInput;
+import org.openqa.selenium.interactions.Sequence;
 import org.openqa.selenium.support.ui.*;
 
 import java.time.Duration;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
@@ -334,36 +337,44 @@ public class FunctionUltis {
             int scrollStartY = (int) (dimension.getHeight() * 0.7);
             int scrollEndY = (int) (dimension.getHeight() * 0.3);
             int centerX = dimension.getWidth() / 2;
-            TouchAction<?> action = new TouchAction<>(driver);
-            action.press(PointOption.point(centerX, scrollStartY))
-                    .waitAction()
-                    .moveTo(PointOption.point(centerX, scrollEndY))
-                    .release()
-                    .perform();
+
+            PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, "finger");
+            Sequence swipe = new Sequence(finger, 1);
+            swipe.addAction(finger.createPointerMove(Duration.ZERO, PointerInput.Origin.viewport(), centerX, scrollStartY));
+            swipe.addAction(finger.createPointerDown(PointerInput.MouseButton.LEFT.asArg()));
+            swipe.addAction(finger.createPointerMove(Duration.ofMillis(600), PointerInput.Origin.viewport(), centerX, scrollEndY));
+            swipe.addAction(finger.createPointerUp(PointerInput.MouseButton.LEFT.asArg()));
+
+            driver.perform(Arrays.asList(swipe));
             System.out.println("Scrolled down once.");
         } catch (Exception e) {
-            throw new RuntimeException("Lỗi khi cuộn xuống: " + e.getMessage());
+            throw new RuntimeException("Lỗi khi cuộn xuống: " + e.getMessage(), e);
         }
     }
 
-    // Cuộn xuống một đoạn ngắn
+
+    // Cuộn xuống một đoạn ngắn (dùng W3C Actions)
     public void scrollDownSmall() {
         try {
             Dimension dimension = driver.manage().window().getSize();
             int scrollStartY = (int) (dimension.getHeight() * 0.6);
             int scrollEndY = (int) (dimension.getHeight() * 0.4);
             int centerX = dimension.getWidth() / 2;
-            TouchAction<?> action = new TouchAction<>(driver);
-            action.press(PointOption.point(centerX, scrollStartY))
-                    .waitAction()
-                    .moveTo(PointOption.point(centerX, scrollEndY))
-                    .release()
-                    .perform();
+
+            PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, "finger");
+            Sequence swipe = new Sequence(finger, 1);
+            swipe.addAction(finger.createPointerMove(Duration.ZERO, PointerInput.Origin.viewport(), centerX, scrollStartY));
+            swipe.addAction(finger.createPointerDown(PointerInput.MouseButton.LEFT.asArg()));
+            swipe.addAction(finger.createPointerMove(Duration.ofMillis(400), PointerInput.Origin.viewport(), centerX, scrollEndY));
+            swipe.addAction(finger.createPointerUp(PointerInput.MouseButton.LEFT.asArg()));
+
+            driver.perform(Arrays.asList(swipe));
             System.out.println("Scrolled down small.");
         } catch (Exception e) {
-            throw new RuntimeException("Lỗi khi cuộn xuống nhỏ: " + e.getMessage());
+            throw new RuntimeException("Lỗi khi cuộn xuống nhỏ: " + e.getMessage(), e);
         }
     }
+
 
     // Chờ phần tử hiển thị
     private boolean waitForElementToBeVisible(By locator) {
