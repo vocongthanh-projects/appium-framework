@@ -402,6 +402,34 @@ public class FunctionUltis {
         }
     }
 
+    // Kiểm tra văn bản không hiển thị nữa
+    public boolean verifyTextNotDisplayed(String text) {
+        try {
+            By locator = By.xpath("//*[@text='" + text + "']");
+            if (!isElementPresent(locator)) {
+                System.out.println("🟢 Text '" + text + "' is not displayed as expected.");
+                return true;
+            }
+            // Nếu không tìm thấy bằng text chính xác, thử tìm bằng contains
+            locator = By.xpath("//*[contains(@text, '" + text + "')]");
+            if (!isElementPresent(locator)) {
+                System.out.println("🟢 Text '" + text + "' is not displayed as expected (contains check).");
+                return true;
+            }
+            // Nếu vẫn tìm thấy phần tử
+            List<WebElement> elements = driver.findElements(locator);
+            for (WebElement element : elements) {
+                if (element.isDisplayed() && element.getText() != null && element.getText().trim().equals(text)) {
+                    throw new RuntimeException("Text '" + text + "' is still displayed.");
+                }
+            }
+            System.out.println("🟢 Text '" + text + "' is not displayed as expected.");
+            return true;
+        } catch (Exception e) {
+            throw new RuntimeException("Error while verifying text '" + text + "' is not displayed: " + e.getMessage());
+        }
+    }
+
     // Đóng bàn phím
     public void closeKeyboard() {
         try {

@@ -52,13 +52,13 @@ public class User {
             while (retryCount < maxRetries) {
                 try {
                     // Nhập tài khoản
-                    functionsUltis.clickAndInputByLocator(By.id("com.ots.c08.vnecsgt.cbcs:id/edtCard"), "033033");
+                    functionsUltis.clickAndInputByLocator(By.id("com.ots.gsafe.firefighter:id/edtPhone"), "0372438603");
 
                     // Nhập mật khẩu
-                    functionsUltis.clickAndInputByLocator(By.id("com.ots.c08.vnecsgt.cbcs:id/edtPassword"), "1234567");
+                    functionsUltis.clickAndInputByLocator(By.id("com.ots.gsafe.firefighter:id/edtPassword"), "Bv@123456");
 
                     // Đăng nhập
-                    functionsUltis.clickElementByLocator(By.id("com.ots.c08.vnecsgt.cbcs:id/btnLogin"));
+                    functionsUltis.clickElementByLocator(By.id("com.ots.gsafe.firefighter:id/button"));
 
                     // Kiểm tra thành công
                     if (isLoggedIn()) {
@@ -89,7 +89,7 @@ public class User {
             try {
                 WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
                 WebElement homeElement = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                        By.xpath("//android.widget.TextView[@resource-id=\"com.ots.c08.vnecsgt.cbcs:id/navTitle\" and @text=\"Trang chủ\"]")));
+                        By.id("com.ots.gsafe.firefighter:id/navigation_bar_item_large_label_view")));
                 return homeElement.isDisplayed();
             } catch (TimeoutException | NoSuchElementException e) {
                 return false;

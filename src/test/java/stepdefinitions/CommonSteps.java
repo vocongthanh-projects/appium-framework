@@ -46,6 +46,11 @@ public class CommonSteps {
         functionUltis.verifyTextDisplayed(text);
     }
 
+    @Then("Người dùng kiểm tra văn bản {string} không hiển thị")
+    public void userVerifiesTextNotDisplayed(String text) {
+        functionUltis.verifyTextNotDisplayed(text);
+    }
+
     @Then("Người dùng kiểm tra phần tử {string} hiển thị")
     public void userVerifiesElementDisplayed(String identifier) {
         functionUltis.isElementDisplayed(identifier);

@@ -23,7 +23,7 @@ public class Hooks {
     private static AppiumDriverLocalService service;
     private static AndroidDriver driver;
 
-    private static final String APP_PACKAGE = "com.ots.c08.vnecsgt.cbcs";
+    private static final String APP_PACKAGE = "com.ots.gsafe.firefighter";
 
     public static int totalTestCases = 0;
     public static int pass = 0;
