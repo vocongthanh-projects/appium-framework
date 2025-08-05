@@ -2,6 +2,7 @@ package stepdefinitions;
 
 import bases.FunctionUltis;
 import hooks.Hooks;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -16,7 +17,7 @@ public class CommonSteps {
         functionUltis.clickElement(identifier);
     }
 
-    @When("Người dùng nhập {string} vào trường {string}")
+    @When("Người dùng nhập {string} vào trường có placeholder {string}")
     public void userInputsTextIntoElement(String text, String identifier) {
         functionUltis.clickAndInput(identifier, text);
     }
@@ -44,6 +45,16 @@ public class CommonSteps {
     @Then("Người dùng kiểm tra văn bản {string} hiển thị")
     public void userVerifiesTextDisplayed(String text) {
         functionUltis.verifyTextDisplayed(text);
+    }
+
+    @When("Người dùng nhập số điện thoại ngẫu nhiên vào trường có placeholder {string}")
+    public void userInputsRandomPhoneNumber(String identifier) {
+        functionUltis.inputRandomPhoneNumber(identifier);
+    }
+
+    @When("Người dùng chọn {string} từ dropdown có placeholder {string}")
+    public void userSelectsOptionFromDropdown(String optionText, String dropdownIdentifier) {
+        functionUltis.selectOptionFromDropdown(dropdownIdentifier, optionText);
     }
 
     @Then("Người dùng kiểm tra văn bản {string} không hiển thị")

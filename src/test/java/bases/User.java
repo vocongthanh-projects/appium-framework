@@ -52,10 +52,10 @@ public class User {
             while (retryCount < maxRetries) {
                 try {
                     // Nhập tài khoản
-                    functionsUltis.clickAndInputByLocator(By.id("com.ots.gsafe.firefighter:id/edtPhone"), "0372438603");
+                    functionsUltis.clickAndInputByLocator(By.id("com.ots.gsafe.firefighter:id/edtPhone"), "0354078927");
 
                     // Nhập mật khẩu
-                    functionsUltis.clickAndInputByLocator(By.id("com.ots.gsafe.firefighter:id/edtPassword"), "Bv@123456");
+                    functionsUltis.clickAndInputByLocator(By.id("com.ots.gsafe.firefighter:id/edtPassword"), "Pc07@1234567");
 
                     // Đăng nhập
                     functionsUltis.clickElementByLocator(By.id("com.ots.gsafe.firefighter:id/button"));

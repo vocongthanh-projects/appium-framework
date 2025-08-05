@@ -3,281 +3,414 @@ Feature: Nguồn lực
   Scenario: Kiểm tra UI combobox Nguồn lực
     Given Người dùng nhấn vào filter Nguồn lực Trang chủ
     Then Người dùng kiểm tra các văn bản sau hiển thị đúng:
-      | Vui lòng chọn loại nguồn lực         |
-      | Nguồn nước tự nhiên                  |
-      | Trụ nước                             |
-      | Đơn vị Điện lực hỗ trợ               |
-      | Đơn vị Y tế hỗ trợ                   |
-      | Đơn vị Công an cấp xã, huyện         |
-      | Đơn vị phương tiện                   |
-      | Bể nước                              |
-      | Cơ sở                                |
-      | Hủy                                  |
-      | Chọn                                 |
+      | Vui lòng chọn loại nguồn lực |
+      | Nguồn nước tự nhiên          |
+      | Trụ nước                     |
+      | Bể nước                      |
+      | Cơ sở                        |
+      | Hủy                          |
+      | Chọn                         |
 
   Scenario: Kiểm tra UI Thêm mới Nguồn lực
     Given Người dùng nhấn vào thêm mới Nguồn lực
     Then Người dùng kiểm tra các văn bản sau hiển thị đúng:
       | Thêm mới nguồn lực  |
       | Chọn loại nguồn lực |
-      | Huỷ                 |
+      | Hủy                 |
       | Xác nhận            |
 
   Scenario: Kiểm tra UI Option Thêm mới Nguồn lực
     Given Người dùng nhấn vào thêm mới Nguồn lực
     When Người dùng nhấp vào "Chọn loại nguồn lực"
     Then Người dùng kiểm tra các văn bản sau hiển thị đúng:
-      | Vui lòng chọn                        |
-      | Đơn vị Y tế hỗ trợ                  |
-      | Đơn vị Điện lực hỗ trợ              |
-      | Đơn vị hỗ trợ phương tiện           |
-      | Nguồn nước                           |
-      | Đơn vị Công an cấp xã, huyện        |
-      | Hủy                                  |
-      | Chọn                                 |
+      | Vui lòng chọn |
+      | Nguồn nước    |
+      | Hủy           |
+      | Chọn          |
 
-  Scenario: Kiểm tra UI Option "Đơn vị Y tế hỗ trợ"
+
+  Scenario: Kiểm tra UI Option "Nguồn nước"
     Given Người dùng nhấn vào thêm mới Nguồn lực
     When Người dùng nhấp vào "Chọn loại nguồn lực"
-    And Người dùng nhấp vào "Đơn vị Y tế hỗ trợ"
+    And Người dùng nhấp vào "Nguồn nước"
     And Người dùng nhấp vào "Xác nhận"
     Then Người dùng kiểm tra các văn bản sau hiển thị đúng:
-      | Thêm nguồn lực                        |
-      | Tên đơn vị hỗ trợ *                   |
-      | Nhập tên đơn vị hỗ trợ                |
-      | Số điện thoại liên hệ (báo hỗ trợ y tế) * |
-      | Nhập số điện thoại                    |
-      | Lấy tọa độ hiện tại                   |
-      | Kinh độ *                             |
-      | Vĩ độ *                               |
-      | Chọn tỉnh/thành                       |
-      | Chọn xã/phường                        |
-      | Nhập đường/phố                        |
-      | Nhập số                               |
-      | Nhập địa chỉ                          |
-      | Trạng thái                            |
-      | Kích hoạt                              |
-      | Hủy                                   |
-      | Lưu                                   |
+      | Loại nguồn nước *        |
+      | Phân loại chi tiết *     |
+      | Loại đơn vị quản lý *   |
+      | Tên đơn vị quản lý *      |
+      | Tên nguồn nước           |
+      | Trữ lượng/Lưu lượng (m3) |
+      | Kinh độ *                |
+      | Vĩ độ *                  |
+      | Tỉnh/Thành *             |
+    When Người dùng cuộn xuống một lần
+    Then Người dùng kiểm tra các văn bản sau hiển thị đúng:
+      | Xã/Phường *       |
+      | Đường/Phố/Thôn/Tổ |
+      | Số                |
+      | Địa chỉ           |
+    When Người dùng cuộn xuống một lần
+    Then Người dùng kiểm tra các văn bản sau hiển thị đúng:
+      | Khả năng cấp nước * |
+      | Có                |
+      | Không             |
+      | Ghi chú             |
+      | Trạng thái        |
+      | Kích hoạt         |
+      | Hủy               |
+      | Lưu               |
 
-  Scenario: Thêm mới "Đơn vị Y tế hỗ trợ" thành công (Happy Case)
+  Scenario: Validate nguồn nước thành công (Happy Case)
     Given Người dùng nhấn vào thêm mới Nguồn lực
     When Người dùng nhấp vào "Chọn loại nguồn lực"
-    And Người dùng nhấp vào "Đơn vị Y tế hỗ trợ"
+    And Người dùng nhấp vào "Nguồn nước"
     And Người dùng nhấp vào "Xác nhận"
-
-  # Nhập thông tin vào các trường
-    And Người dùng nhập "Trạm Y tế Phường 1" vào trường "Tên đơn vị hỗ trợ"
-    And Người dùng nhập "0909123456" vào trường "Số điện thoại liên hệ"
-    And Người dùng nhập "106.700" vào trường "Kinh độ"
-    And Người dùng nhập "10.776" vào trường "Vĩ độ"
-    And Người dùng nhấp vào "Tỉnh/Thành"
-    And Người dùng nhấp vào "TP. Hồ Chí Minh"
-    And Người dùng nhấp vào "Xã/Phường"
-    And Người dùng nhấp vào "Phường 1"
-    And Người dùng nhập "Nguyễn Văn Cừ" vào trường "Đường/Phố"
-    And Người dùng nhập "123" vào trường "Số"
-    And Người dùng nhập "123 Nguyễn Văn Cừ, P.1, Q.5" vào trường "Địa chỉ"
-    And Người dùng nhấp vào "Kích hoạt"
-
-  # Lưu dữ liệu
     And Người dùng nhấp vào "Lưu"
-
-    Then Người dùng kiểm tra văn bản "Thêm mới nguồn lực thành công" hiển thị
-
-
-
-
-  Scenario: Kiểm tra UI Option "Đơn vị Điện lực hỗ trợ"
-    Given Người dùng nhấn vào thêm mới Nguồn lực
-    When Người dùng nhấp vào "Chọn loại nguồn lực"
-    And Người dùng nhấp vào "Đơn vị Điện lực hỗ trợ"
-    And Người dùng nhấp vào "Xác nhận"
-    Then Người dùng kiểm tra các văn bản sau hiển thị đúng:
-      | Tên đơn vị hỗ trợ *                |
-      | Nhập tên đơn vị hỗ trợ             |
-      | Số điện thoại liên hệ (báo hỗ trợ cắt điện) * |
-      | Nhập số điện thoại                 |
-      | Lấy tọa độ hiện tại                |
-      | Kinh độ *                          |
-      | Vĩ độ *                            |
-      | Tỉnh/Thành *                       |
-      | Xã/Phường *                        |
-      | Đường/Phố                          |
-      | Nhập đường/phố                     |
-      | Số                                 |
-      | Nhập số                            |
-      | Địa chỉ                            |
-      | Nhập địa chỉ                       |
-      | Trạng thái                         |
-      | Kích hoạt                          |
-      | Hủy                                |
-      | Lưu                                |
-
-  Scenario: Thêm mới "Đơn vị Điện lực hỗ trợ" thành công (Happy Case)
-    Given Người dùng nhấn vào thêm mới Nguồn lực
-    When Người dùng nhấp vào "Chọn loại nguồn lực"
-    And Người dùng nhấp vào "Đơn vị Điện lực hỗ trợ"
-    And Người dùng nhấp vào "Xác nhận"
-    And Người dùng nhập "Công ty Điện lực TP HCM" vào trường "Tên đơn vị hỗ trợ"
-    And Người dùng nhập "0909123456" vào trường "Số điện thoại liên hệ"
+    And Người dùng nhấp vào "Trụ nước"
+    Then Người dùng kiểm tra văn bản "Vui lòng chọn loại nguồn nước" hiển thị
+    And Người dùng nhấp vào "Lưu"
+    And Người dùng nhấp vào "Trụ nổi 3 họng"
+    Then Người dùng kiểm tra văn bản "Vui lòng chọn phân loại chi tiết" hiển thị
+    And Người dùng nhấp vào "Lưu"
+    And Người dùng nhấp vào "Ủy ban nhân dân"
+    Then Người dùng kiểm tra văn bản "Vui lòng chọn loại đơn vị quản lý" hiển thị
+    And Người dùng nhập "Trụ nước UI Mobile" vào trường có placeholder "Nhập tên nguồn nước"
     And Người dùng nhấp vào "Lấy tọa độ hiện tại"
-    And Người dùng nhấp vào "TP. Hồ Chí Minh"
-    And Người dùng nhấp vào "Phường Bến Nghé"
-    And Người dùng nhập "Lê Duẩn" vào trường "Đường/Phố"
-    And Người dùng nhập "1" vào trường "Số"
-    And Người dùng nhập "01 Lê Duẩn, Bến Nghé, Quận 1, TP. HCM" vào trường "Địa chỉ"
-    And Người dùng nhấp vào "Kích hoạt"
+    And Người dùng cuộn xuống một lần
+    And Người dùng nhập "Đường Phúc Xá" vào trường có placeholder "Nhập Đường/Phố/Thôn/Tổ"
+    And Người dùng nhập "175" vào trường có placeholder "Nhập số"
+    And Người dùng cuộn xuống một lần
     And Người dùng nhấp vào "Lưu"
-    Then Người dùng kiểm tra văn bản "Thêm mới nguồn lực thành công" hiển thị
+    Then Người dùng kiểm tra văn bản "Vui lòng chọn khả năng cấp nước" hiển thị
+    And Người dùng nhấp vào "Có"
+    And Người dùng nhấp vào "Lưu"
+    Then Người dùng kiểm tra văn bản "Vui lòng chọn phương tiện có thể cấp nước" hiển thị
+    And Người dùng cuộn xuống một lần
+    And Người dùng nhấp vào "Xe chữa cháy"
+    And Người dùng nhấp vào "Lưu"
+    Then Người dùng kiểm tra văn bản "Đã thêm mới nguồn lực thành công!" hiển thị
+    And Người dùng nhấp vào "Đóng"
 
-
-  Scenario: Kiểm tra UI Option "Đơn vị hỗ trợ phương tiện"
+  Scenario: Thêm mới Trụ nước thành công (Happy Case)
     Given Người dùng nhấn vào thêm mới Nguồn lực
     When Người dùng nhấp vào "Chọn loại nguồn lực"
-    And Người dùng nhấp vào "Đơn vị hỗ trợ phương tiện"
+    And Người dùng nhấp vào "Nguồn nước"
     And Người dùng nhấp vào "Xác nhận"
-    Then Người dùng kiểm tra các văn bản sau hiển thị đúng:
-      | Tên đơn vị hỗ trợ *                              |
-      | Nhập tên đơn vị hỗ trợ                           |
-      | Số điện thoại liên hệ (báo hỗ trợ an ninh) *     |
-      | Nhập số điện thoại                                |
-      | Lấy tọa độ hiện tại                               |
-      | Kinh độ *                                         |
-      | Vĩ độ *                                           |
-      | Tỉnh/Thành *                                     |
-      | Xã/Phường *                                      |
-      | Đường/Phố                                        |
-      | Nhập đường/phố                                   |
-      | Số                                               |
-      | Nhập số                                          |
-      | Địa chỉ                                          |
-      | Nhập địa chỉ                                     |
-      | Chủng loại phương tiện *                         |
-      | Chọn loại phương tiện                            |
-      | Số lượng *                                       |
-      | Nhập số lượng                                    |
-      | Trạng thái                                       |
-      | Kích hoạt                                        |
-      | Hủy                                              |
-      | Lưu                                              |
-
-  Scenario: Thêm mới "Đơn vị hỗ trợ phương tiện" thành công (Happy Case)
-    Given Người dùng nhấn vào thêm mới Nguồn lực
-    When Người dùng nhấp vào "Chọn loại nguồn lực"
-    And Người dùng nhấp vào "Đơn vị hỗ trợ phương tiện"
-    And Người dùng nhấp vào "Xác nhận"
-    And Người dùng nhập "Đơn vị hỗ trợ xe chuyên dụng" vào trường "Tên đơn vị hỗ trợ"
-    And Người dùng nhập "0987654321" vào trường "Số điện thoại liên hệ"
+    And Người dùng chọn "Trụ nước" từ dropdown có placeholder "Chọn loại nguồn nước"
+    And Người dùng chọn "Trụ nổi 3 họng" từ dropdown có placeholder "Chọn phân loại chi tiết"
+    And Người dùng chọn "Ủy ban nhân dân" từ dropdown có placeholder "Chọn đơn vị quản lý"
+    And Người dùng nhập "Trụ nước UI Mobile" vào trường có placeholder "Nhập tên nguồn nước"
     And Người dùng nhấp vào "Lấy tọa độ hiện tại"
-    And Người dùng nhấp vào "TP. Hồ Chí Minh"
-    And Người dùng nhấp vào "Phường Bến Thành"
-    And Người dùng nhập "Trần Hưng Đạo" vào trường "Đường/Phố"
-    And Người dùng nhập "12" vào trường "Số"
-    And Người dùng nhập "12 Trần Hưng Đạo, Bến Thành, Quận 1, TP. HCM" vào trường "Địa chỉ"
-    And Người dùng nhấp vào "Chọn loại phương tiện"
-    And Người dùng nhấp vào "Xe cứu hỏa"
-    And Người dùng nhập "3" vào trường "Số lượng"
-    And Người dùng nhấp vào "Kích hoạt"
+    And Người dùng cuộn xuống một lần
+    And Người dùng nhập "Đường Phúc Xá" vào trường có placeholder "Nhập Đường/Phố/Thôn/Tổ"
+    And Người dùng nhập "175" vào trường có placeholder "Nhập số"
+    And Người dùng cuộn xuống một lần
+    And Người dùng nhấp vào "Có"
+    And Người dùng cuộn xuống một lần
+    And Người dùng nhấp vào "Xe chữa cháy"
+    And Người dùng nhập "Không có ghi chú" vào trường có placeholder "Nhập ghi chú"
     And Người dùng nhấp vào "Lưu"
-    Then Người dùng kiểm tra văn bản "Thêm mới nguồn lực thành công" hiển thị
-
-  Scenario: Kiểm tra UI Option "Đơn vị hỗ trợ phương tiện"
-    Given Người dùng nhấn vào thêm mới Nguồn lực
-    When Người dùng nhấp vào "Chọn loại nguồn lực"
-    And Người dùng nhấp vào "Đơn vị hỗ trợ phương tiện"
-    And Người dùng nhấp vào "Xác nhận"
+    Then Người dùng kiểm tra văn bản "Đã thêm mới nguồn lực thành công!" hiển thị
+    And Người dùng nhấp vào "Đóng"
+    Given Người dùng nhấp vào "Nguồn lực"
+    And Người dùng nhấp vào "Xem vị trí"
     Then Người dùng kiểm tra các văn bản sau hiển thị đúng:
-      | Tên đơn vị hỗ trợ *                        |
-      | Nhập tên đơn vị hỗ trợ                     |
-      | Số điện thoại liên hệ (báo hỗ trợ an ninh) * |
-      | Nhập số điện thoại                         |
-      | Lấy tọa độ hiện tại                        |
-      | Kinh độ *                                  |
-      | Vĩ độ *                                    |
-      | Tỉnh/Thành *                               |
-      | Xã/Phường *                                |
-      | Đường/Phố                                  |
-      | Nhập đường/phố                             |
-      | Số                                         |
-      | Nhập số                                    |
-      | Địa chỉ                                    |
-      | Nhập địa chỉ                               |
-      | Chủng loại phương tiện *                  |
-      | Chọn loại phương tiện                      |
-      | Số lượng *                                 |
-      | Nhập số lượng                              |
-      | Trạng thái                                 |
-      | Kích hoạt                                   |
-      | Hủy                                        |
-      | Lưu                                        |
+      | Trụ nước UI Mobile                                      |
+      | 175 - Đường Phúc Xá - Phường Ba Đình - Thành phố Hà Nội |
+      | Tiêu đề:                                                |
+      | Thông tin liên lạc:                                     |
 
-  Scenario: Thêm mới "Đơn vị hỗ trợ phương tiện" thành công (Happy Case)
-    Given Người dùng nhấn vào thêm mới Nguồn lực
-    When Người dùng nhấp vào "Chọn loại nguồn lực"
-    And Người dùng nhấp vào "Đơn vị hỗ trợ phương tiện"
-    And Người dùng nhấp vào "Xác nhận"
-    And Người dùng nhập "Đơn vị hỗ trợ xe chuyên dụng" vào trường "Tên đơn vị hỗ trợ"
-    And Người dùng nhập "0987654321" vào trường "Số điện thoại liên hệ"
-    And Người dùng nhấp vào "Lấy tọa độ hiện tại"
-    And Người dùng nhấp vào "TP. Hồ Chí Minh"
-    And Người dùng nhấp vào "Phường Bến Thành"
-    And Người dùng nhập "Trần Hưng Đạo" vào trường "Đường/Phố"
-    And Người dùng nhập "12" vào trường "Số"
-    And Người dùng nhập "12 Trần Hưng Đạo, Bến Thành, Quận 1, TP. HCM" vào trường "Địa chỉ"
-    And Người dùng nhấp vào "Chọn loại phương tiện"
-    And Người dùng nhấp vào "Xe cứu hỏa"
-    And Người dùng nhập "3" vào trường "Số lượng"
-    And Người dùng nhấp vào "Kích hoạt"
-    And Người dùng nhấp vào "Lưu"
-    Then Người dùng kiểm tra văn bản "Thêm mới nguồn lực thành công" hiển thị
-
-
-  Scenario: Kiểm tra UI Option "Đơn vị Công an cấp xã, huyện"
-    Given Người dùng nhấn vào thêm mới Nguồn lực
-    When Người dùng nhấp vào "Chọn loại nguồn lực"
-    And Người dùng nhấp vào "Đơn vị Công an cấp xã, huyện"
-    And Người dùng nhấp vào "Xác nhận"
+  Scenario: Kiểm tra dữ liệu sau khi thêm mới Trụ nước thành công (Happy Case)
+    Given Người dùng nhấp vào "Nguồn lực"
+    When Người dùng nhập "Trụ nước UI Mobile" vào trường có placeholder "Nhập thông tin tìm kiếm...."
+    When Người dùng nhấp vào "Chọn tỉnh/thành"
+    When Người dùng cuộn đến phần tử có văn bản "Thành phố Hà Nội"
+    When Người dùng nhấp vào "Thành phố Hà Nội"
+    When Người dùng chọn "Phường Ba Đình" từ dropdown có placeholder "Chọn xã/phường"
     Then Người dùng kiểm tra các văn bản sau hiển thị đúng:
-      | Tổ chức đơn vị *                                 |
-      | Nhập tổ chức đơn vị                              |
-      | Tên đơn vị hỗ trợ *                              |
-      | Nhập tên đơn vị hỗ trợ                           |
-      | Số điện thoại liên hệ (báo hỗ trợ an ninh) *     |
-      | Nhập số điện thoại                                |
-      | Lấy tọa độ hiện tại                               |
-      | Kinh độ *                                         |
-      | Vĩ độ *                                           |
-      | Tỉnh/Thành *                                      |
-      | Xã/Phường *                                       |
-      | Đường/Phố                                         |
-      | Nhập đường/phố                                    |
-      | Số                                                |
-      | Nhập số                                           |
-      | Địa chỉ                                           |
-      | Nhập địa chỉ                                      |
-      | Trạng thái                                        |
-      | Kích hoạt                                         |
-      | Hủy                                               |
-      | Lưu                                               |
+      | Địa chỉ:                                                |
+      | 175 - Đường Phúc Xá - Phường Ba Đình - Thành phố Hà Nội |
+      | Loại nguồn nước:                                        |
+      | Trụ nước                                                |
+      | Phân loại chi tiết:                                     |
+      | Trụ nổi 3 họng                                          |
+      | Đã kích hoạt                                            |
+    When Người dùng nhấp vào "Cập nhật"
+    Then Người dùng kiểm tra các văn bản sau hiển thị đúng:
+      | Trụ nước           |
+      | Trụ nổi 3 họng     |
+      | Ủy ban nhân dân    |
+      | Trụ nước UI Mobile |
+      | Thành phố Hà Nội   |
+    And Người dùng cuộn xuống một lần
+    Then Người dùng kiểm tra các văn bản sau hiển thị đúng:
+      | Phường Ba Đình |
+      | Đường Phúc Xá  |
+      | 175            |
+    And Người dùng cuộn xuống một lần
+    Then Người dùng kiểm tra các văn bản sau hiển thị đúng:
+      | Có               |
+      | Xe chữa cháy     |
+      | Không có ghi chú |
+      | Kích hoạt        |
 
-  Scenario: Thêm mới "Đơn vị Công an cấp xã, huyện" thành công (Happy Case)
+  Scenario: Kiểm tra cập nhật Trụ nước thành công (Happy Case)
+    Given Người dùng nhấp vào "Nguồn lực"
+    When Người dùng nhấp vào "Cập nhật"
+    And Người dùng chọn "Nguồn nước tự nhiên" từ dropdown có placeholder "Trụ nước"
+    And Người dùng chọn "Bến lấy nước" từ dropdown có placeholder "Chọn phân loại chi tiết"
+    And Người dùng nhập "Trụ nước update UI Mobile" vào trường có placeholder "Trụ nước UI Mobile"
+    And Người dùng nhập "123" vào trường có placeholder "0"
+    And Người dùng nhấp vào "Lấy tọa độ hiện tại"
+    And Người dùng cuộn xuống một lần
+    And Người dùng nhập "Đường Phúc Xá" vào trường có placeholder "Nhập Đường/Phố/Thôn/Tổ"
+    And Người dùng nhập "175" vào trường có placeholder "Nhập số"
+    And Người dùng cuộn xuống một lần
+    And Người dùng nhấp vào "Không"
+    And Người dùng nhập "Không có nguyên nhân" vào trường có placeholder "Nhập nguyên nhân"
+    And Người dùng cuộn xuống một lần
+    And Người dùng nhấp vào "Lưu"
+    Then Người dùng kiểm tra văn bản "Đã cập nhật nguồn lực thành công!" hiển thị
+    And Người dùng nhấp vào "Đóng"
+    When Người dùng nhấp vào "Cập nhật"
+    Then Người dùng kiểm tra các văn bản sau hiển thị đúng:
+      | Nguồn nước tự nhiên       |
+      | Bến lấy nước              |
+      | Ủy ban nhân dân           |
+      | Trụ nước update UI Mobile |
+      | 123                       |
+    And Người dùng cuộn xuống một lần
+    Then Người dùng kiểm tra các văn bản sau hiển thị đúng:
+      | Thành phố Hà Nội |
+      | Phường Ba Đình   |
+      | Đường Phúc Xá    |
+      | 175              |
+    And Người dùng cuộn xuống một lần
+    Then Người dùng kiểm tra các văn bản sau hiển thị đúng:
+      | Không có nguyên nhân |
+      | Không có ghi chú     |
+      | Kích hoạt            |
+
+  Scenario: Kiểm tra Xóa Trụ nước thành công (Happy Case)
+    Given Người dùng nhấp vào "Nguồn lực"
+    Then Người dùng kiểm tra văn bản "Trụ nước update UI Mobile" hiển thị
+    When Người dùng nhấp vào "Xóa"
+    Then Người dùng kiểm tra các văn bản sau hiển thị đúng:
+      | Thông báo                              |
+      | Xác nhận xóa nguồn lực \nTrụ nước update UI Mobile |
+      | Không                                  |
+    When Người dùng nhấp vào "Xác nhận"
+    Then Người dùng kiểm tra văn bản "Trụ nước update UI Mobile" không hiển thị
+
+
+  Scenario: Thêm mới Nguồn nước tự nhiên thành công (Happy Case)
     Given Người dùng nhấn vào thêm mới Nguồn lực
     When Người dùng nhấp vào "Chọn loại nguồn lực"
-    And Người dùng nhấp vào "Đơn vị Công an cấp xã, huyện"
+    And Người dùng nhấp vào "Nguồn nước"
     And Người dùng nhấp vào "Xác nhận"
-    And Người dùng nhập "Công an Quận 1" vào trường "Tổ chức đơn vị"
-    And Người dùng nhập "Đội Cảnh sát PCCC" vào trường "Tên đơn vị hỗ trợ"
-    And Người dùng nhập "0934567890" vào trường "Số điện thoại liên hệ"
+    And Người dùng chọn "Nguồn nước tự nhiên" từ dropdown có placeholder "Chọn loại nguồn nước"
+    And Người dùng nhấp vào "Ao, Hồ, Đầm"
+    And Người dùng chọn "Bến lấy nước" từ dropdown có placeholder "Chọn phân loại chi tiết"
+    And Người dùng chọn "Ủy ban nhân dân" từ dropdown có placeholder "Chọn đơn vị quản lý"
+    And Người dùng nhập "Nguồn nước tự nhiên UI Mobile" vào trường có placeholder "Nhập tên nguồn nước"
+    And Người dùng nhập "123" vào trường có placeholder "Nhập trữ lượng/lưu lượng (m3)"
     And Người dùng nhấp vào "Lấy tọa độ hiện tại"
-    And Người dùng nhấp vào "TP. Hồ Chí Minh"
-    And Người dùng nhấp vào "Phường Bến Nghé"
-    And Người dùng nhập "Lê Lợi" vào trường "Đường/Phố"
-    And Người dùng nhập "15" vào trường "Số"
-    And Người dùng nhập "15 Lê Lợi, Bến Nghé, Quận 1, TP. HCM" vào trường "Địa chỉ"
-    And Người dùng nhấp vào "Kích hoạt"
+    And Người dùng cuộn xuống một lần
+    And Người dùng nhập "Đường Phúc Xá" vào trường có placeholder "Nhập Đường/Phố/Thôn/Tổ"
+    And Người dùng nhập "175" vào trường có placeholder "Nhập số"
+    And Người dùng cuộn xuống một lần
+    And Người dùng nhấp vào "Có"
+    And Người dùng cuộn xuống một lần
+    And Người dùng nhấp vào "Xe chữa cháy"
+    And Người dùng nhập "Không có ghi chú" vào trường có placeholder "Nhập ghi chú"
     And Người dùng nhấp vào "Lưu"
-    Then Người dùng kiểm tra văn bản "Thêm mới nguồn lực thành công" hiển thị
+    Then Người dùng kiểm tra văn bản "Đã thêm mới nguồn lực thành công!" hiển thị
+    And Người dùng nhấp vào "Đóng"
+
+  Scenario: Kiểm tra dữ liệu sau khi thêm mới Nguồn nước tự nhiên thành công (Happy Case)
+    Given Người dùng nhấp vào "Nguồn lực"
+    When Người dùng nhập "Nguồn nước tự nhiên UI Mobile" vào trường có placeholder "Nhập thông tin tìm kiếm...."
+    When Người dùng nhấp vào "Chọn tỉnh/thành"
+    When Người dùng cuộn đến phần tử có văn bản "Thành phố Hà Nội"
+    When Người dùng nhấp vào "Thành phố Hà Nội"
+    Then Người dùng kiểm tra các văn bản sau hiển thị đúng:
+      | Địa chỉ:                                                |
+      | 175 - Đường Phúc Xá - Phường Ba Đình - Thành phố Hà Nội |
+      | Loại nguồn nước:                                        |
+      | Nguồn nước tự nhiên                                     |
+      | Phân loại chi tiết:                                     |
+      | Bến lấy nước                                              |
+      | Đã kích hoạt                                            |
+    When Người dùng nhấp vào "Cập nhật"
+    Then Người dùng kiểm tra các văn bản sau hiển thị đúng:
+      | Nguồn nước tự nhiên           |
+      | Bến lấy nước                    |
+      | Ủy ban nhân dân               |
+      | Nguồn nước tự nhiên UI Mobile |
+    And Người dùng cuộn xuống một lần
+    Then Người dùng kiểm tra các văn bản sau hiển thị đúng:
+      | Thành phố Hà Nội |
+      | Phường Ba Đình   |
+      | Đường Phúc Xá    |
+      | 175              |
+    And Người dùng cuộn xuống một lần
+    Then Người dùng kiểm tra các văn bản sau hiển thị đúng:
+      | Có           |
+      | Xe chữa cháy |
+      | Không có ghi chú |
+      | Kích hoạt    |
+
+  Scenario: Kiểm tra cập nhật Nguồn nước tự nhiên thành công (Happy Case)
+    Given Người dùng nhấp vào "Nguồn lực"
+    When Người dùng nhấp vào "Cập nhật"
+    And Người dùng chọn "Bể nước" từ dropdown có placeholder "Nguồn nước tự nhiên"
+    And Người dùng nhập "Nguồn nước tự nhiên update UI Mobile" vào trường có placeholder "Nguồn nước tự nhiên UI Mobile"
+    And Người dùng nhấp vào "Lấy tọa độ hiện tại"
+    And Người dùng cuộn xuống một lần
+    And Người dùng nhập "Đường Phúc Xá" vào trường có placeholder "Nhập Đường/Phố/Thôn/Tổ"
+    And Người dùng nhập "175" vào trường có placeholder "Nhập số"
+    And Người dùng cuộn xuống một lần
+    And Người dùng nhấp vào "Không"
+    And Người dùng nhập "Không có nguyên nhân" vào trường có placeholder "Nhập nguyên nhân"
+    And Người dùng cuộn xuống một lần
+    And Người dùng nhấp vào "Lưu"
+    Then Người dùng kiểm tra văn bản "Đã cập nhật nguồn lực thành công!" hiển thị
+    And Người dùng nhấp vào "Đóng"
+    When Người dùng nhấp vào "Cập nhật"
+    Then Người dùng kiểm tra các văn bản sau hiển thị đúng:
+      | Bể nước           |
+      | Bể nước công cộng     |
+      | Ủy ban nhân dân    |
+      | Nguồn nước tự nhiên update UI Mobile |
+      | 123 |
+    And Người dùng cuộn xuống một lần
+    Then Người dùng kiểm tra các văn bản sau hiển thị đúng:
+      | Thành phố Hà Nội   |
+      | Phường Ba Đình |
+      | Đường Phúc Xá  |
+      | 175            |
+    And Người dùng cuộn xuống một lần
+    Then Người dùng kiểm tra các văn bản sau hiển thị đúng:
+      | Không có ghi chú |
+      | Không có nguyên nhân|
+      | Kích hoạt    |
+
+  Scenario: Kiểm tra Xóa Nguồn nước tự nhiên thành công (Happy Case)
+    Given Người dùng nhấp vào "Nguồn lực"
+    Then Người dùng kiểm tra văn bản "Nguồn nước tự nhiên update UI Mobile" hiển thị
+    When Người dùng nhấp vào "Xóa"
+    Then Người dùng kiểm tra các văn bản sau hiển thị đúng:
+      | Thông báo                                         |
+      | Xác nhận xóa nguồn lực \nNguồn nước tự nhiên update UI Mobile |
+      | Không                                             |
+    When Người dùng nhấp vào "Xác nhận"
+    Then Người dùng kiểm tra văn bản "Nguồn nước tự nhiên update UI Mobile" không hiển thị
+
+
+  Scenario: Thêm mới Bể nước thành công (Happy Case)
+    Given Người dùng nhấn vào thêm mới Nguồn lực
+    When Người dùng nhấp vào "Chọn loại nguồn lực"
+    And Người dùng nhấp vào "Nguồn nước"
+    And Người dùng nhấp vào "Xác nhận"
+    And Người dùng chọn "Bể nước" từ dropdown có placeholder "Chọn loại nguồn nước"
+    And Người dùng chọn "Ủy ban nhân dân" từ dropdown có placeholder "Chọn đơn vị quản lý"
+    And Người dùng nhập "Bể nước UI Mobile" vào trường có placeholder "Nhập tên nguồn nước"
+    And Người dùng nhập "123" vào trường có placeholder "Nhập trữ lượng/lưu lượng (m3)"
+    And Người dùng nhấp vào "Lấy tọa độ hiện tại"
+    And Người dùng cuộn xuống một lần
+    And Người dùng nhập "Đường Phúc Xá" vào trường có placeholder "Nhập Đường/Phố/Thôn/Tổ"
+    And Người dùng nhập "175" vào trường có placeholder "Nhập số"
+    And Người dùng cuộn xuống một lần
+    And Người dùng nhấp vào "Có"
+    And Người dùng cuộn xuống một lần
+    And Người dùng nhấp vào "Xe chữa cháy"
+    And Người dùng nhập "Không có ghi chú" vào trường có placeholder "Nhập ghi chú"
+    And Người dùng nhấp vào "Lưu"
+    Then Người dùng kiểm tra văn bản "Đã thêm mới nguồn lực thành công!" hiển thị
+    And Người dùng nhấp vào "Đóng"
+
+
+  Scenario: Kiểm tra dữ liệu sau khi thêm mới Bể nước thành công (Happy Case)
+    Given Người dùng nhấp vào "Nguồn lực"
+    When Người dùng nhập "Bể nước UI Mobile" vào trường có placeholder "Nhập thông tin tìm kiếm...."
+    When Người dùng nhấp vào "Chọn tỉnh/thành"
+    When Người dùng cuộn đến phần tử có văn bản "Thành phố Hà Nội"
+    When Người dùng nhấp vào "Thành phố Hà Nội"
+    When Người dùng chọn "Phường Ba Đình" từ dropdown có placeholder "Chọn xã/phường"
+    Then Người dùng kiểm tra các văn bản sau hiển thị đúng:
+      | Địa chỉ:                                                |
+      | 175 - Đường Phúc Xá - Phường Ba Đình - Thành phố Hà Nội |
+      | Loại nguồn nước:                                        |
+      | Bể nước                                                 |
+      | Phân loại chi tiết:                                     |
+      | Bể nước công cộng                                       |
+      | Đã kích hoạt                                            |
+    When Người dùng nhấp vào "Cập nhật"
+    Then Người dùng kiểm tra các văn bản sau hiển thị đúng:
+      | Bể nước           |
+      | Bể nước công cộng |
+      | Ủy ban nhân dân   |
+      | Bể nước UI Mobile |
+    And Người dùng cuộn xuống một lần
+    Then Người dùng kiểm tra các văn bản sau hiển thị đúng:
+      | Thành phố Hà Nội |
+      | Phường Ba Đình   |
+      | Đường Phúc Xá    |
+      | 175              |
+    And Người dùng cuộn xuống một lần
+    Then Người dùng kiểm tra các văn bản sau hiển thị đúng:
+      | Có           |
+      | Xe chữa cháy |
+      | Không có ghi chú |
+      | Kích hoạt    |
+
+  Scenario: Kiểm tra cập nhật Bể nước thành công (Happy Case)
+    Given Người dùng nhấp vào "Nguồn lực"
+    When Người dùng nhấp vào "Cập nhật"
+    And Người dùng chọn "Trụ nước" từ dropdown có placeholder "Bể nước"
+    And Người dùng chọn "Trụ nổi 3 họng" từ dropdown có placeholder "Chọn phân loại chi tiết"
+    And Người dùng nhập "Bể nước update UI Mobile" vào trường có placeholder "Bể nước UI Mobile"
+    And Người dùng nhấp vào "Lấy tọa độ hiện tại"
+    And Người dùng cuộn xuống một lần
+    And Người dùng nhập "Đường Phúc Xá" vào trường có placeholder "Nhập Đường/Phố/Thôn/Tổ"
+    And Người dùng nhập "175" vào trường có placeholder "Nhập số"
+    And Người dùng cuộn xuống một lần
+    And Người dùng nhấp vào "Không"
+    And Người dùng nhập "Không có nguyên nhân" vào trường có placeholder "Nhập nguyên nhân"
+    And Người dùng cuộn xuống một lần
+    And Người dùng nhấp vào "Lưu"
+    Then Người dùng kiểm tra văn bản "Đã cập nhật nguồn lực thành công!" hiển thị
+    And Người dùng nhấp vào "Đóng"
+    When Người dùng nhấp vào "Cập nhật"
+    Then Người dùng kiểm tra các văn bản sau hiển thị đúng:
+      | Trụ nước                 |
+      | Trụ nổi 3 họng           |
+      | Ủy ban nhân dân          |
+      | Bể nước update UI Mobile |
+    And Người dùng cuộn xuống một lần
+    Then Người dùng kiểm tra các văn bản sau hiển thị đúng:
+      | Thành phố Hà Nội   |
+      | Phường Ba Đình |
+      | Đường Phúc Xá |
+      | 175           |
+    And Người dùng cuộn xuống một lần
+    Then Người dùng kiểm tra các văn bản sau hiển thị đúng:
+      | Không có nguyên nhân     |
+      | Không có ghi chú |
+      | Kích hoạt |
+
+  Scenario: Kiểm tra Xóa Bể nước thành công (Happy Case)
+    Given Người dùng nhấp vào "Nguồn lực"
+    Then Người dùng kiểm tra văn bản "Bể nước update UI Mobile" hiển thị
+    When Người dùng nhấp vào "Xóa"
+    Then Người dùng kiểm tra các văn bản sau hiển thị đúng:
+      | Thông báo                             |
+      | Xác nhận xóa nguồn lực \nBể nước update UI Mobile |
+      | Không                                 |
+    When Người dùng nhấp vào "Xác nhận"
+    Then Người dùng kiểm tra văn bản "Bể nước update UI Mobile" không hiển thị
+
 
 
 

@@ -13,11 +13,13 @@ import java.time.Duration;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 
 public class FunctionUltis {
     private AndroidDriver driver;
     private WebDriverWait wait;
     private JavascriptExecutor js;
+    private HashSet<String> generatedPhoneNumbers = new HashSet<>(); // Lưu trữ các số điện thoại đã tạo
 
     public FunctionUltis(AndroidDriver driver) {
         this.driver = driver;
@@ -226,6 +228,39 @@ public class FunctionUltis {
         } catch (Exception e) {
             throw new RuntimeException("Không thể xác minh văn bản hiển thị: " + e.getMessage());
         }
+    }
+
+    // Phương thức tạo số điện thoại ngẫu nhiên bắt đầu bằng "03"
+    public String generateRandomPhoneNumber() {
+        Random random = new Random();
+        StringBuilder phoneNumber = new StringBuilder("03");
+
+        // Tạo 8 số ngẫu nhiên
+        for (int i = 0; i < 8; i++) {
+            phoneNumber.append(random.nextInt(10));
+        }
+
+        String result = phoneNumber.toString();
+
+        // Kiểm tra xem số điện thoại đã tồn tại chưa
+        while (generatedPhoneNumbers.contains(result)) {
+            phoneNumber = new StringBuilder("03");
+            for (int i = 0; i < 8; i++) {
+                phoneNumber.append(random.nextInt(10));
+            }
+            result = phoneNumber.toString();
+        }
+
+        // Lưu số điện thoại mới vào HashSet
+        generatedPhoneNumbers.add(result);
+        System.out.println("Generated phone number: " + result);
+        return result;
+    }
+
+    // Phương thức nhập số điện thoại ngẫu nhiên vào trường input
+    public void inputRandomPhoneNumber(String identifier) {
+        String phoneNumber = generateRandomPhoneNumber();
+        clickAndInput(identifier, phoneNumber);
     }
 
     // Kiểm tra nhiều văn bản hiển thị đúng
@@ -488,6 +523,59 @@ public class FunctionUltis {
 
         if (retries >= maxRetries) {
             System.out.println("Max retries reached. Element not found.");
+        }
+    }
+
+    // Chọn một option từ dropdown dựa trên văn bản
+    public void selectOptionFromDropdown(String dropdownIdentifier, String optionText) {
+        if (driver == null) {
+            throw new IllegalStateException("AndroidDriver chưa được khởi tạo.");
+        }
+
+        By dropdownLocator = getLocatorByText(dropdownIdentifier);
+        int maxRetries = 3;
+        int retryCount = 0;
+        int waitBetweenRetries = 1000;
+
+        while (retryCount < maxRetries) {
+            try {
+                // Chờ và nhấp vào dropdown để mở danh sách
+                waitForElementToBeVisible(dropdownLocator);
+                WebElement dropdownElement = findUniqueElement(dropdownLocator);
+                if (dropdownElement.isDisplayed() && dropdownElement.isEnabled()) {
+                    dropdownElement.click();
+                    System.out.println("Clicked on dropdown: " + dropdownIdentifier);
+
+                    // Tìm và nhấp vào option trong danh sách dropdown
+                    By optionLocator = By.xpath("//*[@text='" + optionText + "']");
+                    if (!isElementPresent(optionLocator)) {
+                        System.out.println("Fallback to contains for option text: " + optionText);
+                        optionLocator = By.xpath("//*[contains(@text, '" + optionText + "')]");
+                    }
+
+                    waitForElementToBeVisible(optionLocator);
+                    WebElement optionElement = findUniqueElement(optionLocator);
+                    if (optionElement.isDisplayed() && optionElement.isEnabled()) {
+                        optionElement.click();
+                        System.out.println("Selected option: " + optionText + " from dropdown: " + dropdownIdentifier);
+                        return;
+                    } else {
+                        throw new RuntimeException("Option '" + optionText + "' không thể chọn.");
+                    }
+                } else {
+                    throw new RuntimeException("Dropdown '" + dropdownIdentifier + "' không thể nhấn.");
+                }
+            } catch (Exception e) {
+                retryCount++;
+                if (retryCount >= maxRetries) {
+                    throw new RuntimeException("Không thể chọn option '" + optionText + "' từ dropdown '" + dropdownIdentifier + "' sau " + maxRetries + " lần thử: " + e.getMessage());
+                }
+                try {
+                    Thread.sleep(waitBetweenRetries);
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                }
+            }
         }
     }
 

@@ -14,11 +14,6 @@ Feature: Danh sách nguồn lực
       | Vui lòng chọn loại nguồn lực         |
       | Nguồn nước tự nhiên                  |
       | Trụ nước                             |
-      | Đơn vị Điện lực hỗ trợ               |
-      | Đơn vị Y tế hỗ trợ                   |
-      | Đơn vị Công an cấp xã, huyện         |
-      | Đơn vị phương tiện                   |
       | Bể nước                              |
-      | Cơ sở                                |
       | Hủy                                  |
       | Chọn                                 |
