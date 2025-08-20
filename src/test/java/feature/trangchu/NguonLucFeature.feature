@@ -43,7 +43,7 @@ Feature: Nguồn lực
       | Trữ lượng/Lưu lượng (m3) |
       | Kinh độ *                |
       | Vĩ độ *                  |
-      | Tỉnh/Thành *             |
+      | Tỉnh/TP *             |
     When Người dùng cuộn xuống một lần
     Then Người dùng kiểm tra các văn bản sau hiển thị đúng:
       | Xã/Phường *       |
@@ -117,20 +117,22 @@ Feature: Nguồn lực
     And Người dùng nhấp vào "Xem vị trí"
     Then Người dùng kiểm tra các văn bản sau hiển thị đúng:
       | Trụ nước UI Mobile                                      |
-      | 175 - Đường Phúc Xá - Phường Ba Đình - Thành phố Hà Nội |
+      | 175, Đường Phúc Xá, Phường Cầu Ông Lãnh, Thành phố Hồ Chí Minh |
       | Tiêu đề:                                                |
       | Thông tin liên lạc:                                     |
 
   Scenario: Kiểm tra dữ liệu sau khi thêm mới Trụ nước thành công (Happy Case)
     Given Người dùng nhấp vào "Nguồn lực"
     When Người dùng nhập "Trụ nước UI Mobile" vào trường có placeholder "Nhập thông tin tìm kiếm...."
-    When Người dùng nhấp vào "Chọn tỉnh/thành"
-    When Người dùng cuộn đến phần tử có văn bản "Thành phố Hà Nội"
-    When Người dùng nhấp vào "Thành phố Hà Nội"
-    When Người dùng chọn "Phường Ba Đình" từ dropdown có placeholder "Chọn xã/phường"
+    When Người dùng nhấp vào "Chọn Tỉnh/TP"
+    When Người dùng cuộn đến phần tử có văn bản "Thành phố Hồ Chí Minh"
+    When Người dùng nhấp vào "Thành phố Hồ Chí Minh"
+    When Người dùng nhấp vào "Chọn xã/phường"
+    When Người dùng cuộn đến phần tử có văn bản "Phường Cầu Ông Lãnh"
+    When Người dùng nhấp vào "Phường Cầu Ông Lãnh"
     Then Người dùng kiểm tra các văn bản sau hiển thị đúng:
       | Địa chỉ:                                                |
-      | 175 - Đường Phúc Xá - Phường Ba Đình - Thành phố Hà Nội |
+      | 175, Đường Phúc Xá, Phường Cầu Ông Lãnh, Thành phố Hồ Chí Minh |
       | Loại nguồn nước:                                        |
       | Trụ nước                                                |
       | Phân loại chi tiết:                                     |
@@ -142,10 +144,10 @@ Feature: Nguồn lực
       | Trụ nổi 3 họng     |
       | Ủy ban nhân dân    |
       | Trụ nước UI Mobile |
-      | Thành phố Hà Nội   |
+      | Thành phố Hồ Chí Minh   |
     And Người dùng cuộn xuống một lần
     Then Người dùng kiểm tra các văn bản sau hiển thị đúng:
-      | Phường Ba Đình |
+      | Phường Cầu Ông Lãnh |
       | Đường Phúc Xá  |
       | 175            |
     And Người dùng cuộn xuống một lần
@@ -182,8 +184,8 @@ Feature: Nguồn lực
       | 123                       |
     And Người dùng cuộn xuống một lần
     Then Người dùng kiểm tra các văn bản sau hiển thị đúng:
-      | Thành phố Hà Nội |
-      | Phường Ba Đình   |
+      | Thành phố Hồ Chí Minh |
+      | Phường Cầu Ông Lãnh   |
       | Đường Phúc Xá    |
       | 175              |
     And Người dùng cuộn xuống một lần
@@ -231,12 +233,12 @@ Feature: Nguồn lực
   Scenario: Kiểm tra dữ liệu sau khi thêm mới Nguồn nước tự nhiên thành công (Happy Case)
     Given Người dùng nhấp vào "Nguồn lực"
     When Người dùng nhập "Nguồn nước tự nhiên UI Mobile" vào trường có placeholder "Nhập thông tin tìm kiếm...."
-    When Người dùng nhấp vào "Chọn tỉnh/thành"
-    When Người dùng cuộn đến phần tử có văn bản "Thành phố Hà Nội"
-    When Người dùng nhấp vào "Thành phố Hà Nội"
+    When Người dùng nhấp vào "Chọn Tỉnh/TP"
+    When Người dùng cuộn đến phần tử có văn bản "Thành phố Hồ Chí Minh"
+    When Người dùng nhấp vào "Thành phố Hồ Chí Minh"
     Then Người dùng kiểm tra các văn bản sau hiển thị đúng:
       | Địa chỉ:                                                |
-      | 175 - Đường Phúc Xá - Phường Ba Đình - Thành phố Hà Nội |
+      | 175, Đường Phúc Xá, Phường Cầu Ông Lãnh, Thành phố Hồ Chí Minh |
       | Loại nguồn nước:                                        |
       | Nguồn nước tự nhiên                                     |
       | Phân loại chi tiết:                                     |
@@ -250,8 +252,8 @@ Feature: Nguồn lực
       | Nguồn nước tự nhiên UI Mobile |
     And Người dùng cuộn xuống một lần
     Then Người dùng kiểm tra các văn bản sau hiển thị đúng:
-      | Thành phố Hà Nội |
-      | Phường Ba Đình   |
+      | Thành phố Hồ Chí Minh |
+      | Phường Cầu Ông Lãnh   |
       | Đường Phúc Xá    |
       | 175              |
     And Người dùng cuộn xuống một lần
@@ -286,8 +288,8 @@ Feature: Nguồn lực
       | 123 |
     And Người dùng cuộn xuống một lần
     Then Người dùng kiểm tra các văn bản sau hiển thị đúng:
-      | Thành phố Hà Nội   |
-      | Phường Ba Đình |
+      | Thành phố Hồ Chí Minh   |
+      | Phường Cầu Ông Lãnh |
       | Đường Phúc Xá  |
       | 175            |
     And Người dùng cuộn xuống một lần
@@ -334,13 +336,15 @@ Feature: Nguồn lực
   Scenario: Kiểm tra dữ liệu sau khi thêm mới Bể nước thành công (Happy Case)
     Given Người dùng nhấp vào "Nguồn lực"
     When Người dùng nhập "Bể nước UI Mobile" vào trường có placeholder "Nhập thông tin tìm kiếm...."
-    When Người dùng nhấp vào "Chọn tỉnh/thành"
-    When Người dùng cuộn đến phần tử có văn bản "Thành phố Hà Nội"
-    When Người dùng nhấp vào "Thành phố Hà Nội"
-    When Người dùng chọn "Phường Ba Đình" từ dropdown có placeholder "Chọn xã/phường"
+    When Người dùng nhấp vào "Chọn Tỉnh/TP"
+    When Người dùng cuộn đến phần tử có văn bản "Thành phố Hồ Chí Minh"
+    When Người dùng nhấp vào "Thành phố Hồ Chí Minh"
+    When Người dùng nhấp vào "Chọn xã/phường"
+    When Người dùng cuộn đến phần tử có văn bản "Phường Cầu Ông Lãnh"
+    When Người dùng nhấp vào "Phường Cầu Ông Lãnh"
     Then Người dùng kiểm tra các văn bản sau hiển thị đúng:
       | Địa chỉ:                                                |
-      | 175 - Đường Phúc Xá - Phường Ba Đình - Thành phố Hà Nội |
+      | 175, Đường Phúc Xá, Phường Cầu Ông Lãnh, Thành phố Hồ Chí Minh |
       | Loại nguồn nước:                                        |
       | Bể nước                                                 |
       | Phân loại chi tiết:                                     |
@@ -354,8 +358,8 @@ Feature: Nguồn lực
       | Bể nước UI Mobile |
     And Người dùng cuộn xuống một lần
     Then Người dùng kiểm tra các văn bản sau hiển thị đúng:
-      | Thành phố Hà Nội |
-      | Phường Ba Đình   |
+      | Thành phố Hồ Chí Minh |
+      | Phường Cầu Ông Lãnh   |
       | Đường Phúc Xá    |
       | 175              |
     And Người dùng cuộn xuống một lần
@@ -390,8 +394,8 @@ Feature: Nguồn lực
       | Bể nước update UI Mobile |
     And Người dùng cuộn xuống một lần
     Then Người dùng kiểm tra các văn bản sau hiển thị đúng:
-      | Thành phố Hà Nội   |
-      | Phường Ba Đình |
+      | Thành phố Hồ Chí Minh   |
+      | Phường Cầu Ông Lãnh |
       | Đường Phúc Xá |
       | 175           |
     And Người dùng cuộn xuống một lần

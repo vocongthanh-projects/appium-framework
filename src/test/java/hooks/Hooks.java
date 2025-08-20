@@ -43,20 +43,12 @@ public class Hooks {
 
             functionUltis = new FunctionUltis(driver);
 
-            safelyRestartApp(APP_PACKAGE, 3);
-
-            // ⏳ Kiểm tra crash popup lần nữa trước login (phòng trường hợp hiện muộn)
-            if (waitForCrashPopup(5)) {
-                System.err.println("🚨 Crash popup phát hiện sau khi restart app và trước login.");
-                try {
-                    driver.findElement(By.xpath("//android.widget.Button[@resource-id='android:id/aerr_close']")).click();
-                    Thread.sleep(200);
-                } catch (Exception ex) {
-                    System.err.println("⚠️ Không thể click nút Close App: " + ex.getMessage());
-                }
-                throw new RuntimeException("App bị crash ngay trước login.");
+            // 🔁 Mở lại app mỗi Scenario
+            if (driver.isAppInstalled(APP_PACKAGE)) {
+                driver.terminateApp(APP_PACKAGE); // Đảm bảo tắt app
+                Thread.sleep(1000); // Đợi app tắt hoàn toàn
             }
-
+            driver.activateApp(APP_PACKAGE);
             // ✅ Bắt đầu login
             User.LoginHelper loginHelper = new User.LoginHelper(driver);
             loginHelper.performLogin();
@@ -69,70 +61,6 @@ public class Hooks {
             System.err.println("❌ Lỗi trong setUp: " + e.getMessage());
             scenario.log("Lỗi khởi tạo: " + e.getMessage());
             throw new RuntimeException("Không thể khởi tạo scenario: " + e.getMessage(), e);
-        }
-    }
-
-
-
-
-    private boolean waitForCrashPopup(int timeoutInSeconds) {
-        try {
-            driver.context("NATIVE_APP");
-
-            int elapsed = 0;
-            while (elapsed < timeoutInSeconds) {
-                List<WebElement> closeAppButtons =
-                        driver.findElements(By.xpath("//android.widget.Button[@resource-id='android:id/aerr_close']"));
-
-                if (!closeAppButtons.isEmpty()) {
-                    System.out.println("🚨 Popup crash được phát hiện.");
-                    return true;
-                }
-
-                Thread.sleep(1000);
-                elapsed++;
-            }
-        } catch (Exception e) {
-            System.err.println("⚠️ Không thể kiểm tra popup crash: " + e.getMessage());
-        }
-        return false;
-    }
-    private void safelyRestartApp(String packageName, int maxRetries) throws InterruptedException {
-        int attempt = 0;
-        while (attempt < maxRetries) {
-            try {
-                if (driver.isAppInstalled(packageName)) {
-                    System.out.println("⛔ Đóng app (terminate) lần " + (attempt + 1));
-                    driver.terminateApp(packageName);
-                    Thread.sleep(2000);
-                }
-
-                System.out.println("▶️ Mở lại app (activate) lần " + (attempt + 1));
-                driver.activateApp(packageName);
-
-                // ⏳ Chờ xem popup crash có hiện không (5 giây)
-                if (waitForCrashPopup(5)) {
-                    System.err.println("🚨 Phát hiện popup crash. Đóng popup...");
-                    try {
-                        driver.findElement(By.xpath("//android.widget.Button[@resource-id='android:id/aerr_close']")).click();
-                    } catch (Exception clickErr) {
-                        System.err.println("⚠️ Không thể tự click 'Close app': " + clickErr.getMessage());
-                    }
-                    Thread.sleep(2000);
-                    throw new RuntimeException("App crash: xuất hiện popup 'Close app'");
-                }
-
-                System.out.println("✅ App khởi động lại thành công.");
-                return;
-
-            } catch (Exception e) {
-                attempt++;
-                System.err.println("⚠️ Lỗi khi restart app lần " + attempt + ": " + e.getMessage());
-                Thread.sleep(2000);
-                if (attempt == maxRetries) {
-                    throw new RuntimeException("❌ Không thể restart app sau " + maxRetries + " lần thử.", e);
-                }
-            }
         }
     }
 
@@ -156,7 +84,7 @@ public class Hooks {
         capabilities.setCapability("autoGrantPermissions", true);
         capabilities.setCapability("autoDismissAlerts", true);
 
-        URL url = new URL("http://127.0.0.1:4723");
+        URL url = new URL("http://127.0.0.1:4725");
         driver = new AndroidDriver(url, capabilities);
     }
 

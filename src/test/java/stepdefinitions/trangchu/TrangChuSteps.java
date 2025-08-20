@@ -9,8 +9,9 @@ public class TrangChuSteps {
     private final FunctionUltis functionUltis = Hooks.functionUltis;
 
     @Given("Người dùng nhấn vào filter Nguồn lực Trang chủ")
-    public void nhanVaoMenuNguonLuc() {
-        functionUltis.clickElementByLocator(By.xpath("//android.widget.RelativeLayout[@resource-id=\"com.ots.gsafe.firefighter:id/rlFilter\"]/android.widget.ImageView"));
+    public void nhanVaoMenuNguonLuc() throws InterruptedException {
+        Thread.sleep(2000);
+        functionUltis.clickElementByLocator(By.id("com.ots.gsafe.firefighter:id/rlFilter"));
     }
 
     @Given("Người dùng nhấn vào thêm mới Nguồn lực")
