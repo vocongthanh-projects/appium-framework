@@ -87,5 +87,15 @@ public class CommonSteps {
         functionUltis.verifyMultipleTextsDisplayed(texts);
     }
 
+    @Then("Người dùng chờ trong {int} giây")
+    public void waitForSeconds(int seconds) {
+        try {
+            Thread.sleep(seconds * 1000L); // Chờ theo số giây
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt(); // Reset trạng thái interrupt
+            throw new RuntimeException("Thread bị gián đoạn khi chờ", e);
+        }
+    }
+
 
 }

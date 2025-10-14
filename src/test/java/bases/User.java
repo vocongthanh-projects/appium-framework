@@ -42,8 +42,8 @@ public class User {
                 System.out.println("✅ Người dùng đã đăng nhập. Bỏ qua bước đăng nhập.");
                 return;
             }
+            System.out.println("🔐 Thực hiện đăng nhập với username: ...");
 
-            System.out.println("🔐 Thực hiện đăng nhập với username: " + username + " và password: " + password);
 
             int maxRetries = 3;
             int retryCount = 0;
@@ -87,9 +87,9 @@ public class User {
          */
         public boolean isLoggedIn() {
             try {
-                WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+                WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
                 WebElement homeElement = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                        By.id("com.ots.gsafe.firefighter:id/navigation_bar_item_large_label_view")));
+                        By.id("com.ots.gsafe.firefighter:id/navigation_home")));
                 return homeElement.isDisplayed();
             } catch (TimeoutException | NoSuchElementException e) {
                 return false;

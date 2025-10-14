@@ -70,7 +70,7 @@ public class Hooks {
 
 
     private void initializeAppium() throws Exception {
-        service = AppiumDriverLocalService.buildService(new AppiumServiceBuilder().usingPort(4723));
+        service = AppiumDriverLocalService.buildService(new AppiumServiceBuilder().usingPort(4725));
         service.start();
 
         DesiredCapabilities capabilities = new DesiredCapabilities();

@@ -28,6 +28,11 @@ public class FunctionUltis {
     }
 
     // Phương thức click tổng quát dựa trên văn bản
+    public WebElement waitForElement(By locator, int timeoutInSeconds) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeoutInSeconds));
+        return wait.until(ExpectedConditions.presenceOfElementLocated(locator));
+    }
+
     public void clickElement(String identifier) {
         if (driver == null) {
             throw new IllegalStateException("AndroidDriver chưa được khởi tạo.");
@@ -36,26 +41,29 @@ public class FunctionUltis {
         By locator = getLocatorByText(identifier);
         int maxRetries = 3;
         int retryCount = 0;
-        int waitBetweenRetries = 1000;
+        int waitBetweenRetries = 1000; // 1 giây
 
         while (retryCount < maxRetries) {
             try {
-                waitForElementToBeVisible(locator);
-                Thread.sleep(10);
-                WebElement element = findUniqueElement(locator);
-                if (element.isDisplayed() && element.isEnabled()) {
-                    Thread.sleep(10);
-                    element.click();
-                    System.out.println("Clicked on element with text: " + identifier);
-                    return;
-                } else {
-                    throw new RuntimeException("Phần tử không thể nhấn: " + identifier);
-                }
+                // ⏳ Chờ phần tử có trong DOM
+                waitForElement(locator, 5000);
+
+                // ⏳ Chờ element sẵn sàng để click
+                WebElement element = waitUntilElementClickable(locator, 5000);
+                element.click();
+
+                System.out.println("🟢 Clicked on element with text: " + identifier);
+                return;
+
             } catch (Exception e) {
                 retryCount++;
+                System.out.println("⚠️ Lần thử click " + retryCount + " thất bại cho element: " + identifier);
+
                 if (retryCount >= maxRetries) {
-                    throw new RuntimeException("Không thể nhấn phần tử '" + identifier + "' sau " + maxRetries + " lần thử: " + e.getMessage());
+                    throw new RuntimeException("❌ Không thể nhấn phần tử '" + identifier
+                            + "' sau " + maxRetries + " lần thử: " + e.getMessage());
                 }
+
                 try {
                     Thread.sleep(waitBetweenRetries);
                 } catch (InterruptedException ie) {
@@ -64,6 +72,30 @@ public class FunctionUltis {
             }
         }
     }
+
+
+    /**
+     * Polling chờ element có thể click được
+     */
+    private WebElement waitUntilElementClickable(By locator, int timeoutSeconds) {
+        long endTime = System.currentTimeMillis() + timeoutSeconds * 1000L;
+
+        while (System.currentTimeMillis() < endTime) {
+            try {
+                WebElement element = findUniqueElement(locator);
+                if (element != null && element.isDisplayed() && element.isEnabled()) {
+                    return element; // ✅ Sẵn sàng click
+                }
+            } catch (Exception ignored) {
+                // Bỏ qua và retry
+            }
+
+            try { Thread.sleep(500); } catch (InterruptedException ignored) {}
+        }
+
+        throw new RuntimeException("❌ Element không thể click trong " + timeoutSeconds + "s: " + locator);
+    }
+
 
     public void clickElementByLocator(By locator) {
         if (driver == null) return;
@@ -91,6 +123,41 @@ public class FunctionUltis {
                 }
             }
         }
+    }
+
+    private WebElement waitForElementToBeStable(By locator, int checkIntervalMs, int stableCountRequired) {
+        WebElement element = null;
+        int stableCount = 0;
+        org.openqa.selenium.Rectangle lastRect = null;
+
+        for (int i = 0; i < 10; i++) { // Tối đa 10 lần kiểm tra (≈10s nếu checkIntervalMs = 1000)
+            try {
+                element = driver.findElement(locator);
+                org.openqa.selenium.Rectangle currentRect = element.getRect();
+
+                if (lastRect != null && currentRect.equals(lastRect)) {
+                    stableCount++;
+                    if (stableCount >= stableCountRequired) {
+                        System.out.println("🟢 Element ổn định sau " + (i + 1) + " lần kiểm tra.");
+                        return element;
+                    }
+                } else {
+                    stableCount = 0; // Reset nếu element thay đổi vị trí/kích thước
+                }
+
+                lastRect = currentRect;
+                Thread.sleep(checkIntervalMs);
+            } catch (Exception e) {
+                System.out.println("⏳ Đang chờ element ổn định: " + e.getMessage());
+                try {
+                    Thread.sleep(checkIntervalMs);
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+        }
+
+        throw new RuntimeException("Element không ổn định sau nhiều lần kiểm tra: " + locator);
     }
 
 
@@ -136,22 +203,24 @@ public class FunctionUltis {
 
         while (retryCount < maxRetries) {
             try {
+                // 🕒 Chờ phần tử hiển thị & ổn định
                 waitForElementToBeVisible(locator);
-                Thread.sleep(10);
-                WebElement element = findUniqueElement(locator);
-                if (element.isDisplayed() && element.isEnabled()) {
-                    Thread.sleep(10);
+                WebElement element = waitForElementToBeStable(locator, 1000, 3);
+
+                if (element != null && element.isDisplayed() && element.isEnabled()) {
                     clearAndInputText(element, text);
                     closeKeyboard();
-                    System.out.println("Input text '" + text + "' into element: " + identifier);
+                    System.out.println("✅ Đã nhập text '" + text + "' vào element: " + identifier);
                     return;
                 } else {
-                    throw new RuntimeException("Phần tử không thể nhập liệu: " + identifier);
+                    throw new RuntimeException("Phần tử không sẵn sàng để nhập liệu: " + identifier);
                 }
+
             } catch (Exception e) {
                 retryCount++;
+                System.out.println("⚠️ Lần thử thứ " + retryCount + " thất bại khi nhập '" + identifier + "': " + e.getMessage());
                 if (retryCount >= maxRetries) {
-                    throw new RuntimeException("Không thể nhập liệu vào '" + identifier + "' sau " + maxRetries + " lần thử: " + e.getMessage());
+                    throw new RuntimeException("❌ Không thể nhập liệu vào '" + identifier + "' sau " + maxRetries + " lần thử: " + e.getMessage(), e);
                 }
                 try {
                     Thread.sleep(waitBetweenRetries);
@@ -161,6 +230,7 @@ public class FunctionUltis {
             }
         }
     }
+
 
     // Tạo locator dựa trên văn bản với fallback
     private By getLocatorByText(String identifier) {
@@ -211,24 +281,70 @@ public class FunctionUltis {
     // Kiểm tra văn bản hiển thị
     public boolean verifyTextDisplayed(String expectedText) {
         try {
-            By locator = By.xpath("//*[@text='" + expectedText + "']");
-            if (!isElementPresent(locator)) {
-                System.out.println("Fallback to contains for verifying text: " + expectedText);
-                locator = By.xpath("//*[contains(@text, '" + expectedText + "')]");
-            }
-            waitForElementToBeVisible(locator);
-            List<WebElement> elements = driver.findElements(locator);
-            for (WebElement element : elements) {
-                if (element.getText() != null && element.getText().trim().equals(expectedText)) {
-                    System.out.println("🟢 Found text '" + expectedText + "' in DOM.");
-                    return true;
+            String normalizedExpected = expectedText.trim();
+            System.out.println("🔎 Đang xác minh text hiển thị: " + normalizedExpected);
+
+            // Danh sách locator fallback theo thứ tự ưu tiên
+            By[] locators = new By[]{
+                    By.xpath("//*[@text='" + normalizedExpected + "']"),
+                    By.xpath("//*[contains(@text, '" + normalizedExpected + "')]"),
+                    By.xpath("//*[contains(@label, '" + normalizedExpected + "')]"),
+                    By.xpath("//*[contains(@name, '" + normalizedExpected + "')]"),
+                    By.xpath("//*[contains(@content-desc, '" + normalizedExpected + "')]"),
+                    By.xpath("//*[normalize-space(text())='" + normalizedExpected + "']"),
+                    By.xpath("//*[contains(normalize-space(text()), '" + normalizedExpected + "')]")
+            };
+
+            WebElement foundElement = null;
+
+            for (By locator : locators) {
+                try {
+                    System.out.println("🕐 Thử tìm với locator: " + locator);
+
+                    // ⏳ Chờ tối đa 10 giây để element tồn tại
+                    waitForElement(locator, 10);
+
+                    // ⏳ Chờ element hiển thị
+                    waitForElementToBeVisible(locator);
+
+                    // 🔁 Retry trong 3 lần (phòng trường hợp render chậm)
+                    int retry = 0;
+                    while (retry < 3) {
+                        List<WebElement> elements = driver.findElements(locator);
+                        for (WebElement element : elements) {
+                            String actualText = element.getText();
+                            if (actualText != null && actualText.trim().contains(normalizedExpected)) {
+                                System.out.println("✅ Found text: '" + normalizedExpected + "' via " + locator);
+                                foundElement = element;
+                                break;
+                            }
+                        }
+                        if (foundElement != null) break;
+
+                        retry++;
+                        Thread.sleep(1000); // chờ thêm 1s rồi thử lại
+                        System.out.println("⏳ Chờ text hiển thị, lần thử: " + retry);
+                    }
+
+                    if (foundElement != null) break;
+
+                } catch (Exception ignored) {
+                    // Tiếp tục thử locator khác
                 }
             }
-            throw new Exception("Text not found: " + expectedText);
+
+            if (foundElement == null) {
+                throw new Exception("Không tìm thấy văn bản: " + normalizedExpected);
+            }
+
+            return true;
+
         } catch (Exception e) {
-            throw new RuntimeException("Không thể xác minh văn bản hiển thị: " + e.getMessage());
+            throw new RuntimeException("❌ Không thể xác minh văn bản hiển thị: " + e.getMessage());
         }
     }
+
+
 
     // Phương thức tạo số điện thoại ngẫu nhiên bắt đầu bằng "03"
     public String generateRandomPhoneNumber() {
@@ -271,30 +387,37 @@ public class FunctionUltis {
 
             for (String expectedText : expectedTexts) {
                 try {
-                    By locator = By.xpath("//*[@text='" + expectedText + "']");
-                    if (!isElementPresent(locator)) {
+                    String safeText = buildSafeXpathTextCondition(expectedText);
+                    By locator = By.xpath("//*[@text=" + safeText + "]");
+                    boolean found = false;
+
+                    try {
+                        // ⏳ Chờ element xuất hiện trong DOM
+                        waitForElement(locator, 5);
+                        // ⏳ Chờ element hiển thị
+                        waitForElementToBeVisible(locator);
+                        found = waitWithPolling(locator, expectedText, 5);
+                    } catch (Exception e) {
+                        // Nếu hết timeout mà vẫn chưa có -> fallback sang contains
                         System.out.println("Fallback to contains for verifying text: " + expectedText);
-                        locator = By.xpath("//*[contains(@text, '" + expectedText + "')]");
-                    }
-                    waitForElementToBeVisible(locator);
-                    List<WebElement> elements = driver.findElements(locator);
-                    boolean textFound = false;
-
-                    for (WebElement element : elements) {
-                        if (element.getText() != null && element.getText().trim().equals(expectedText)) {
-                            System.out.println("🟢 Found text '" + expectedText + "' in DOM.");
-                            textFound = true;
-                            break;
-                        }
+                        locator = By.xpath("//*[contains(@text, " + safeText + ")]");
+                        waitForElement(locator, 5);
+                        waitForElementToBeVisible(locator);
+                        found = waitWithPolling(locator, expectedText, 5);
                     }
 
-                    if (!textFound) {
+                    if (!found) {
                         allTextsFound = false;
                         errorMessage.append("Text not found: ").append(expectedText).append("; ");
+                    } else {
+                        System.out.println("🟢 Found text '" + expectedText + "' in DOM.");
                     }
+
                 } catch (Exception e) {
                     allTextsFound = false;
-                    errorMessage.append("Error verifying text '").append(expectedText).append("': ").append(e.getMessage()).append("; ");
+                    errorMessage.append("Error verifying text '")
+                            .append(expectedText).append("': ")
+                            .append(e.getMessage()).append("; ");
                 }
             }
 
@@ -302,9 +425,59 @@ public class FunctionUltis {
                 throw new RuntimeException("Không thể xác minh các văn bản hiển thị: " + errorMessage.toString());
             }
         } catch (Exception e) {
-            throw new RuntimeException("Lỗi khi kiểm tra các văn bản hiển thị: " + e.getMessage());
+            throw new RuntimeException("Lỗi khi kiểm tra các văn bản hiển thị: " + e.getMessage(), e);
         }
     }
+
+    /**
+     * Xử lý an toàn chuỗi khi build XPath để tránh lỗi khi có dấu nháy đơn / kép.
+     */
+    private String buildSafeXpathTextCondition(String expectedText) {
+        if (expectedText.contains("'") && expectedText.contains("\"")) {
+            // Nếu chứa cả hai loại dấu nháy -> dùng concat()
+            String[] parts = expectedText.split("'");
+            StringBuilder concatBuilder = new StringBuilder("concat(");
+            for (int i = 0; i < parts.length; i++) {
+                concatBuilder.append("'").append(parts[i]).append("'");
+                if (i != parts.length - 1) concatBuilder.append(", \"'\", ");
+            }
+            concatBuilder.append(")");
+            return concatBuilder.toString();
+        } else if (expectedText.contains("'")) {
+            // Nếu có dấu nháy đơn -> bao bằng dấu nháy kép
+            return "\"" + expectedText + "\"";
+        } else {
+            // Mặc định bao bằng dấu nháy đơn
+            return "'" + expectedText + "'";
+        }
+    }
+
+
+
+    /**
+     * Polling để chờ text hiển thị trong khoảng timeout
+     */
+    private boolean waitWithPolling(By locator, String expectedText, int timeoutSeconds) {
+        long endTime = System.currentTimeMillis() + timeoutSeconds * 1000L;
+
+        while (System.currentTimeMillis() < endTime) {
+            try {
+                List<WebElement> elements = driver.findElements(locator);
+                for (WebElement element : elements) {
+                    if (element.getText() != null && element.getText().trim().equals(expectedText)) {
+                        return true; // ✅ tìm thấy
+                    }
+                }
+            } catch (Exception ignored) {
+                // bỏ qua, retry
+            }
+
+            try { Thread.sleep(500); } catch (InterruptedException ignored) {}
+        }
+
+        return false; // ❌ hết timeout vẫn chưa tìm thấy
+    }
+
 
     // Kiểm tra phần tử bị vô hiệu hóa
     public boolean verifyElementDisabled(String identifier) {
