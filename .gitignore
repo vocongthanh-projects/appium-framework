@@ -1,0 +1,32 @@
+# Maven target and compile
+target/
+*.class
+
+# Sensitive Local Configurations (Do not push to Git!)
+# Logs
+*.log
+
+# Test Reports & Outputs
+/test-output
+/allure-results
+
+# Ignored Local Configurations
+config-local.properties
+src/test/resources/config-local.properties/
+cucumber-reports/
+
+# IntelliJ IDEA
+.idea/
+*.iws
+*.ipr
+
+# Eclipse
+.project
+.classpath
+.settings/
+
+# VS Code
+.vscode/
+
+# MacOS
+.DS_Store
