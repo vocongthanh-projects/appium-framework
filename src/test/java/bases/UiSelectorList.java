@@ -9,7 +9,7 @@ import java.util.List;
  * Native Locator Manager for Android Automation (Replaced XPath).
  * Uses AppiumBy.androidUIAutomator(UiSelector) for lightning-fast native execution speeds.
  */
-public class XpathList {
+public class UiSelectorList {
 
     public static List<By> getButtonLocators(String label) {
         return List.of(

@@ -15,17 +15,17 @@ public class CommonSteps {
 
     private final FunctionUtils function = new FunctionUtils();
 
-    @Then("Text {string} should be visible")
+    @Then("Text {string} phải hiển thị")
     public void textShouldBeVisible(String text) {
         function.shouldBeVisible(text);
     }
 
-    @Then("Text {string} should not be visible")
+    @Then("Text {string} không được hiển thị")
     public void textShouldNotBeVisible(String text) {
         function.shouldNotBeVisible(text);
     }
 
-    @Then("Following texts should not be visible:")
+    @Then("Các text sau không được hiển thị:")
     public void multipleTextsShouldNotBeVisible(DataTable dataTable) {
         List<String> unexpectedTexts = dataTable.asList();
         for (String text : unexpectedTexts) {
@@ -33,7 +33,7 @@ public class CommonSteps {
         }
     }
 
-    @Then("Following texts should be visible:")
+    @Then("Các text sau phải hiển thị:")
     public void multipleTextsShouldBeVisible(DataTable dataTable) {
         List<String> expectedTexts = dataTable.asList();
         for (String text : expectedTexts) {
@@ -41,62 +41,62 @@ public class CommonSteps {
         }
     }
 
-    @When("I click button {string}")
+    @When("Tôi click vào nút {string}")
     public void clickButtonByText(String buttonText) {
         function.clickButton(buttonText);
     }
 
-    @When("I click {string}")
+    @When("Tôi click vào {string}")
     public void clickElementByText(String text) {
         function.click(text);
     }
 
-    @When("I enter {string} into field {string}")
+    @When("Tôi nhập {string} vào trường {string}")
     public void enterTextByLabel(String value, String label) {
         function.type(label, value);
     }
 
-    @When("I enter {string} into field with placeholder {string}")
+    @When("Tôi nhập {string} vào trường có placeholder {string}")
     public void enterTextByPlaceholder(String text, String placeholder) {
         function.type(placeholder, text);
     }
 
-    @When("I enter a random phone number into field with placeholder {string}")
+    @When("Tôi nhập số điện thoại ngẫu nhiên vào trường có placeholder {string}")
     public void enterRandomPhoneNumberByPlaceholder(String placeholder) {
         function.typeRandomPhone(placeholder);
     }
 
-    @Then("I wait for {double} seconds")
+    @Then("Tôi chờ {double} giây")
     public void waitForSeconds(double seconds) {
         try { Thread.sleep((long) (seconds * 1000)); } catch (InterruptedException ignored) {}
     }
 
-    @When("I scroll to element with text {string}")
+    @When("Tôi cuộn đến phần tử có text {string}")
     public void scrollToElement(String text) {
         function.scrollIntoView(text);
     }
 
-    @When("I scroll down once")
+    @When("Tôi cuộn xuống một lần")
     public void swipeDown() {
         function.swipeDown();
     }
 
-    @When("I close the keyboard")
+    @When("Tôi đóng bàn phím")
     public void hideKeyboard() {
         function.hideKeyboard();
     }
 
-    @When("I select {string} from dropdown with placeholder {string}")
+    @When("Tôi chọn {string} từ dropdown có placeholder {string}")
     public void selectOptionByPlaceholder(String option, String placeholder) {
         function.selectFromDropdown(placeholder, option);
     }
 
-    @Then("Element {string} should be enabled")
+    @Then("Phần tử {string} phải ở trạng thái bật")
     public void verifyEnabled(String element) {
         function.shouldBeEnabled(element);
     }
 
-    @Then("Element {string} should be disabled")
+    @Then("Phần tử {string} phải ở trạng thái vô hiệu hóa")
     public void verifyDisabled(String element) {
         function.shouldBeDisabled(element);
     }

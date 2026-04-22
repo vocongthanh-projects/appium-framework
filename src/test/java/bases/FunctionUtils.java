@@ -81,11 +81,11 @@ public class FunctionUtils {
     }
 
     public void click(String text) {
-        clickElement(XpathList.getPriorityLocators(text));
+        clickElement(UiSelectorList.getPriorityLocators(text));
     }
 
     public void clickButton(String text) {
-        clickElement(XpathList.getButtonLocators(text));
+        clickElement(UiSelectorList.getButtonLocators(text));
     }
 
     public void clickElement(List<By> locators) {
@@ -99,7 +99,7 @@ public class FunctionUtils {
     }
 
     public void type(String label, String value) {
-        typeElement(XpathList.getInputLocators(label), value);
+        typeElement(UiSelectorList.getInputLocators(label), value);
     }
 
     public void typeElement(By locator, String value) {
@@ -118,14 +118,14 @@ public class FunctionUtils {
     // --- VERIFICATION API ---
 
     public void shouldBeVisible(String text) {
-        if (!isVisible(XpathList.getPriorityLocators(text))) {
+        if (!isVisible(UiSelectorList.getPriorityLocators(text))) {
             throw new RuntimeException("❌ Phần tử bị ẩn hoặc không xuất hiện: " + text);
         }
         System.out.println("🔍 Xác minh thành công hiển thị: " + text);
     }
 
     public void shouldNotBeVisible(String text) {
-        if (isVisible(XpathList.getPriorityLocators(text), 2)) {
+        if (isVisible(UiSelectorList.getPriorityLocators(text), 2)) {
             throw new RuntimeException("❌ Phần tử vẫn còn hiển thị, trái với kết quả mong đợi: " + text);
         }
         System.out.println("🔍 Đã xác định là biến mất: " + text);
@@ -173,19 +173,19 @@ public class FunctionUtils {
     }
 
     public void selectFromDropdown(String label, String option) {
-        clickElement(XpathList.getDropdownLocators(label));
-        clickElement(XpathList.getPriorityLocators(option));
+        clickElement(UiSelectorList.getDropdownLocators(label));
+        clickElement(UiSelectorList.getPriorityLocators(option));
     }
 
     public void shouldBeEnabled(String text) {
-        WebElement el = waitForElement(XpathList.getPriorityLocators(text), ConfigManager.getDefaultTimeout());
+        WebElement el = waitForElement(UiSelectorList.getPriorityLocators(text), ConfigManager.getDefaultTimeout());
         if (!el.isEnabled()) {
             throw new RuntimeException("❌ Elements không cho phép tương tác (Not enabled): " + text);
         }
     }
 
     public void shouldBeDisabled(String text) {
-        WebElement el = waitForElement(XpathList.getPriorityLocators(text), ConfigManager.getDefaultTimeout());
+        WebElement el = waitForElement(UiSelectorList.getPriorityLocators(text), ConfigManager.getDefaultTimeout());
         if (el.isEnabled()) {
             throw new RuntimeException("❌ Elements vẫn đang sáng đèn (Not disabled): " + text);
         }
