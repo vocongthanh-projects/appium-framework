@@ -1,17 +1,17 @@
 # Appium Automation Framework
 
-Reusable Appium 3 framework cho Android và iOS. Repository chỉ chứa mobile automation infrastructure; application screens, locators, steps, features, credentials và test data thuộc consumer.
+A reusable Appium 3 framework for Android and iOS. This repository contains only mobile automation infrastructure; application screens, locators, steps, features, credentials, and test data belong to the consumer.
 
 ## Modules
 
 ```text
 appium-framework/
-├── framework-core/                 # config, driver, locator, actions, gestures, evidence
-├── framework-testng/               # TestNG lifecycle không phụ thuộc Cucumber
-└── framework-cucumber-testng/      # Cucumber world, hooks và safe runner
+├── framework-core/                 # configuration, driver, locator, actions, gestures, evidence
+├── framework-testng/               # TestNG lifecycle independent of Cucumber
+└── framework-cucumber-testng/      # Cucumber world, hooks, and safe runner
 ```
 
-## Dynamic cross-platform locator
+## Dynamic cross-platform locators
 
 ```java
 private static final MobileLocator EMAIL = MobileLocator.of(
@@ -28,11 +28,11 @@ actions.typeSensitive(PASSWORD, password);
 actions.click(SAVE);
 ```
 
-`LocatorSet` giữ fallback riêng cho Android/iOS theo đúng thứ tự consumer khai báo. Action log chỉ ghi logical name, không ghi giá trị input. Accessibility ID/resource ID/native predicate nên đứng trước text; XPath chỉ là fallback cuối do consumer sở hữu.
+`LocatorSet` keeps separate Android and iOS fallbacks in the exact order declared by the consumer. Action logs contain only the logical name, never the input value. Accessibility IDs, resource IDs, and native predicates should precede text; XPath should be a consumer-owned final fallback.
 
 ## Configuration
 
-Tạo `src/test/resources/config/application.properties` trong consumer hoặc dùng `-Dconfig.file`:
+Create `src/test/resources/config/application.properties` in the consumer or use `-Dconfig.file`:
 
 ```properties
 platform=android
@@ -43,22 +43,22 @@ android.systemPort=8201
 android.app.package=com.yourcompany.application
 ```
 
-Thứ tự override:
+Override order:
 
 ```text
-system property → environment → external config file
+system property → environment → external configuration file
 → consumer application.properties → framework.properties
 ```
 
-Config được validate trước khi tạo session: app ID, endpoint, timeout, reset policy và forwarding port.
+Configuration is validated before session creation, including the application identifier, endpoint, timeout, reset policy, and forwarding port.
 
 ## Runner adapters
 
-TestNG thuần kế thừa `BaseMobileTest`. Cucumber runner kế thừa `AbstractMobileCucumberTest` và thêm `vn.ots.qc.mobile.cucumber` vào glue. `MobileWorld` được PicoContainer tạo riêng cho từng scenario.
+Plain TestNG tests extend `BaseMobileTest`. Cucumber runners extend `AbstractMobileCucumberTest` and add `vn.ots.qc.mobile.cucumber` to glue. PicoContainer creates a separate `MobileWorld` for each scenario.
 
-Parallel mặc định tắt vì hai scenario không được tranh cùng physical device. CI muốn chạy song song phải cấp riêng cho mỗi worker: Appium endpoint, UDID, Android system port hoặc iOS WDA port.
+Parallel execution is disabled by default because scenarios must not compete for the same physical device. To run workers concurrently in CI, assign each one a dedicated Appium endpoint, UDID, Android system port, or iOS WDA port.
 
-Khi có nhiều thiết bị, khai báo `device.targets` và dùng `MobileTargets.PROVIDER` với TestNG hoặc kế thừa `AbstractMobileMatrixCucumberTest`. Matrix fail-fast nếu thiếu/trùng UDID, `systemPort` hoặc `wdaLocalPort`; không cần copy runner/hook/feature theo từng máy.
+For multiple devices, configure `device.targets` and use `MobileTargets.PROVIDER` with TestNG or extend `AbstractMobileMatrixCucumberTest`. The matrix fails fast on missing or duplicate UDIDs, `systemPort`, or `wdaLocalPort`; no runner, hook, or feature duplication is required.
 
 ```java
 @Test(dataProvider = MobileTargets.PROVIDER, dataProviderClass = MobileTargets.class)
@@ -67,13 +67,13 @@ public void savesProfile(DeviceTarget target) {
 }
 ```
 
-`BaseMobileTest` đọc `DeviceTarget` từ test data và tạo context bằng đúng override của target đó.
+`BaseMobileTest` reads `DeviceTarget` from test data and creates a context with that target's overrides.
 
-`mobile().application()` cung cấp `activate`, `terminate`, `restart`, `background`, `isInstalled` và application state bằng package/bundle ID từ config. `ElementActions` có enabled/disabled/text/attribute/wait-until-gone; `Gestures` hỗ trợ swipe bốn hướng, tap và long press.
+`mobile().application()` provides `activate`, `terminate`, `restart`, `background`, `isInstalled`, and application-state operations using the package or bundle identifier from configuration. `ElementActions` supports enabled/disabled/text/attribute/wait-until-gone operations; `Gestures` supports four-way swipe, tap, and long press.
 
 ## Evidence and security
 
-Khi fail, framework lưu screenshot và XML page source đã redact secure fields. XML parser tắt DOCTYPE, external entity và XInclude. Artifact nằm dưới `target/evidence` và không được commit.
+On failure, the framework stores a screenshot and redacted XML page source. The XML parser disables DOCTYPE declarations, external entities, and XInclude. Artifacts are stored under `target/evidence` and must not be committed.
 
 ## Verification
 
@@ -84,8 +84,8 @@ npm audit --audit-level=high
 npm run appium:drivers
 ```
 
-`uiautomator2@8.2.2` hiện phát hành kèm shrinkwrap giữ `brace-expansion@5.0.8`. `postinstall` thay đúng dependency đó bằng bản `5.0.9` đã pin trong lockfile, sau đó CI bắt buộc audit lại. Script sẽ fail nếu bản vá root không đúng phiên bản mong đợi.
+`uiautomator2@8.2.2` currently ships with a shrinkwrap that retains `brace-expansion@5.0.8`. The `postinstall` script replaces that exact dependency with version `5.0.9`, pinned in the lockfile, and CI then runs the audit again. The script fails if the root patch does not match the expected version.
 
-Unit/contract tests không kết nối device. E2E application tests nằm ở consumer repository.
+Unit and contract tests do not connect to a device. End-to-end application tests belong in the consumer repository.
 
-Xem [architecture](docs/ARCHITECTURE.md) và [quality audit](docs/QUALITY_AUDIT.md).
+See [architecture](docs/ARCHITECTURE.md) and the [quality audit](docs/QUALITY_AUDIT.md).
