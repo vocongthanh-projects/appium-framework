@@ -1,0 +1,50 @@
+workflow:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH == "main"'
+
+stages:
+  - verify
+
+java-contracts:
+  stage: verify
+  image: eclipse-temurin:17-jdk
+  interruptible: true
+  variables:
+    MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
+  cache:
+    key:
+      files:
+        - pom.xml
+        - .mvn/wrapper/maven-wrapper.properties
+    paths:
+      - .m2/repository/
+  before_script:
+    - chmod +x mvnw
+  script:
+    - ./mvnw --batch-mode --no-transfer-progress clean verify
+  artifacts:
+    when: always
+    expire_in: 7 days
+    reports:
+      junit:
+        - "*/target/surefire-reports/TEST-*.xml"
+    paths:
+      - "*/target/surefire-reports/"
+
+appium-runtime:
+  stage: verify
+  image: node:22-bookworm
+  interruptible: true
+  cache:
+    key:
+      files:
+        - package-lock.json
+    paths:
+      - .npm/
+  variables:
+    npm_config_cache: "$CI_PROJECT_DIR/.npm"
+  script:
+    - npm ci
+    - npm audit --audit-level=high
+    - npm run appium:drivers

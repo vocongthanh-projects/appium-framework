@@ -1,0 +1,21 @@
+target/
+.m2/
+node_modules/
+.npm/
+allure-results/
+allure-report/
+test-output/
+*.log
+
+# Local configuration and application binaries
+config/local.properties
+*.apk
+*.aab
+*.ipa
+*.app
+
+# Editors and operating systems
+.idea/
+.vscode/
+*.iml
+.DS_Store

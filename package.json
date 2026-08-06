@@ -1,0 +1,25 @@
+{
+  "name": "appium-automation-framework-server",
+  "version": "3.0.0",
+  "private": true,
+  "description": "Reproducible local Appium 3 server and mobile drivers",
+  "scripts": {
+    "postinstall": "node scripts/patch-uiautomator2-dependency.mjs",
+    "appium": "appium --address 127.0.0.1 --port 4723",
+    "appium:drivers": "appium driver list --installed",
+    "doctor:android": "appium driver doctor uiautomator2",
+    "doctor:ios": "appium driver doctor xcuitest"
+  },
+  "devDependencies": {
+    "appium": "3.6.0",
+    "appium-uiautomator2-driver": "8.2.2",
+    "appium-xcuitest-driver": "12.2.0",
+    "brace-expansion": "5.0.9"
+  },
+  "overrides": {
+    "brace-expansion": "5.0.9"
+  },
+  "engines": {
+    "node": ">=20.19.0"
+  }
+}
