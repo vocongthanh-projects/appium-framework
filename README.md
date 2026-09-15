@@ -11,6 +11,53 @@ appium-framework/
 └── framework-cucumber-testng/      # Cucumber world, hooks, and safe runner
 ```
 
+## Installing (consumer projects)
+
+Published on the GitLab Maven Package Registry — this is a **private** registry, so resolving
+dependencies needs auth too, not just deploying. Add the repository to your consumer project's
+`pom.xml`:
+
+```xml
+<repositories>
+    <repository>
+        <id>gitlab-maven</id>
+        <url>http://10.0.0.40/api/v4/groups/qc-quality-control/-/packages/maven</url>
+    </repository>
+</repositories>
+
+<dependencies>
+    <dependency>
+        <groupId>vn.ots.qc</groupId>
+        <artifactId>framework-testng</artifactId>
+        <version>3.0.0-SNAPSHOT</version>
+        <scope>test</scope>
+    </dependency>
+    <!-- or framework-cucumber-testng for BDD -->
+</dependencies>
+```
+
+Then add the matching server credentials to your **local** `~/.m2/settings.xml` (a personal
+access token, scope `read_api` is enough — do not reuse a `write_repository`/`api`-scoped
+token for this):
+
+```xml
+<settings>
+  <servers>
+    <server>
+      <id>gitlab-maven</id>
+      <configuration>
+        <httpHeaders>
+          <property>
+            <name>Private-Token</name>
+            <value>your-personal-access-token</value>
+          </property>
+        </httpHeaders>
+      </configuration>
+    </server>
+  </servers>
+</settings>
+```
+
 ## Dynamic cross-platform locators
 
 ```java
