@@ -1,10 +1,12 @@
 workflow:
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-    - if: '$CI_COMMIT_BRANCH == "main"'
+    - if: '$CI_COMMIT_BRANCH == "develop"'
+    - if: '$CI_COMMIT_TAG'
 
 stages:
   - verify
+  - deploy
 
 java-contracts:
   stage: verify
@@ -48,3 +50,23 @@ appium-runtime:
     - npm ci
     - npm audit --audit-level=high
     - npm run appium:drivers
+
+# Maven SNAPSHOT versions are mutable — a `develop` push can safely redeploy the same
+# -SNAPSHOT version. A `vX.Y.Z` tag bumps every module to that release version first.
+deploy:
+  stage: deploy
+  image: eclipse-temurin:17-jdk
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "develop"'
+    - if: '$CI_COMMIT_TAG'
+  variables:
+    MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
+  before_script:
+    - chmod +x mvnw
+  script:
+    - |
+      if [ -n "$CI_COMMIT_TAG" ]; then
+        RELEASE_VERSION="${CI_COMMIT_TAG#v}"
+        ./mvnw --batch-mode --no-transfer-progress versions:set -DnewVersion="$RELEASE_VERSION" -DprocessAllModules=true -DgenerateBackupPoms=false
+      fi
+    - ./mvnw --batch-mode --no-transfer-progress deploy -DskipTests -s ci_settings.xml
