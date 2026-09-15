@@ -58,6 +58,22 @@ token for this):
 </settings>
 ```
 
+### Consumer project structure
+
+The framework ships no screens, steps, or features — that's the consumer's own layout:
+
+```text
+your-app-repo/
+├── src/test/java/com/yourcompany/
+│   ├── screens/            # screen objects, hold MobileLocator constants
+│   └── tests/               # TestNG tests, extend BaseMobileTest
+├── src/test/resources/
+│   ├── config/
+│   │   └── application.properties   # platform, device, Appium server, app package/bundle id
+│   └── features/            # *.feature, if using framework-cucumber-testng
+└── pom.xml
+```
+
 ## Dynamic cross-platform locators
 
 ```java
