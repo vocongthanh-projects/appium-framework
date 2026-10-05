@@ -1,0 +1,14 @@
+# Copy to config-local.properties (gitignored) and set the platform/device/app details.
+platform=android
+appium.server.url=http://127.0.0.1:4723
+device.name=Android emulator
+device.udid=REPLACE_ME_WITH_DEVICE_UDID
+android.app.package=REPLACE_ME_WITH_ANDROID_APP_PACKAGE
+# Optional path to an application binary:
+# app.path=/absolute/path/to/application.apk
+
+# For iOS, use platform=ios and set these instead:
+# device.name=iOS Simulator
+# device.udid=REPLACE_ME_WITH_SIMULATOR_UDID
+# ios.app.bundleId=REPLACE_ME_WITH_IOS_BUNDLE_ID
+# ios.wdaLocalPort=8100

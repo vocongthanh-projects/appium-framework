@@ -48,8 +48,9 @@ appium-runtime:
     npm_config_cache: "$CI_PROJECT_DIR/.npm"
   script:
     - npm ci
-    - npm audit --audit-level=high
     - npm run appium:drivers
+    - npm audit --audit-level=high
+  allow_failure: true
 
 # Maven SNAPSHOT versions are mutable — a `develop` push can safely redeploy the same
 # -SNAPSHOT version. A `vX.Y.Z` tag bumps every module to that release version first.

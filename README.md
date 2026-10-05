@@ -11,16 +11,19 @@ appium-framework/
 └── framework-cucumber-testng/      # Cucumber world, hooks, và safe runner
 ```
 
+`template-consumer-appium/` là starter project độc lập để copy thành repository consumer. Nó không nằm trong reactor và không chứa app ID hay nghiệp vụ sản phẩm.
+
 ## Cài đặt (dự án consumer)
 
-Publish trên GitLab Maven Package Registry — đây là registry **private**, nên resolve
-dependency cũng cần auth, không chỉ deploy. Thêm repository vào `pom.xml` của dự án consumer:
+Framework publish các artifact lên GitLab Maven Package Registry khi pipeline trên `develop` thành công. Snapshot mới là `3.0.1-SNAPSHOT`. Consumer cần quyền đọc package; trong CI, thêm project consumer vào job-token allowlist của framework và cấu hình `APPIUM_FRAMEWORK_PROJECT_ID`.
+
+Dependency của consumer:
 
 ```xml
 <repositories>
     <repository>
-        <id>gitlab-maven</id>
-        <url>http://10.0.0.40/api/v4/groups/qc-quality-control/-/packages/maven</url>
+        <id>appium-framework-registry</id>
+        <url>https://&lt;GITLAB_DOMAIN&gt;/api/v4/projects/&lt;PROJECT_ID&gt;/packages/maven</url>
     </repository>
 </repositories>
 
@@ -28,34 +31,28 @@ dependency cũng cần auth, không chỉ deploy. Thêm repository vào `pom.xml
     <dependency>
         <groupId>vn.ots.qc</groupId>
         <artifactId>framework-testng</artifactId>
-        <version>3.0.0-SNAPSHOT</version>
+        <version>3.0.1-SNAPSHOT</version>
         <scope>test</scope>
     </dependency>
     <!-- hoặc framework-cucumber-testng cho BDD -->
 </dependencies>
 ```
 
-Sau đó thêm credential tương ứng vào `~/.m2/settings.xml` **local** của bạn (personal access
-token, scope `read_api` là đủ — đừng dùng lại token có scope `write_repository`/`api` cho việc
-này):
+Lưu thông tin xác thực local trong `~/.m2/settings.xml` (không commit token):
 
 ```xml
 <settings>
   <servers>
     <server>
-      <id>gitlab-maven</id>
-      <configuration>
-        <httpHeaders>
-          <property>
-            <name>Private-Token</name>
-            <value>your-personal-access-token</value>
-          </property>
-        </httpHeaders>
-      </configuration>
+      <id>appium-framework-registry</id>
+      <username>YOUR_GITLAB_USERNAME_OR_TOKEN_USER</username>
+      <password>YOUR_LOCAL_READ_PACKAGE_TOKEN</password>
     </server>
   </servers>
 </settings>
 ```
+
+`template-consumer-appium/` includes a consumer CI example using `CI_JOB_TOKEN`; the framework project must allow that consumer project in its job-token allowlist. The Appium Node runtime job reports current npm audit advisories as a non-blocking warning; Java framework verification remains required before Maven publication.
 
 ### Cấu trúc dự án consumer
 
