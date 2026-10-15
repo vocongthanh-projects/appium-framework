@@ -1,0 +1,48 @@
+image: maven:3.9-eclipse-temurin-17
+
+stages:
+  - verify
+
+consumer-java:
+  stage: verify
+  before_script:
+    - mkdir -p "$HOME/.m2"
+    - |
+      cat > "$HOME/.m2/settings.xml" <<EOF
+      <settings xmlns="http://maven.apache.org/SETTINGS/1.2.0">
+        <servers>
+          <server>
+            <id>appium-framework-registry</id>
+            <username>gitlab-ci-token</username>
+            <password>${CI_JOB_TOKEN}</password>
+          </server>
+        </servers>
+      </settings>
+      EOF
+  script:
+    - test -n "$APPIUM_FRAMEWORK_PROJECT_ID"
+    - APPIUM_FRAMEWORK_VERSION="${APPIUM_FRAMEWORK_VERSION:-3.0.1-SNAPSHOT}"
+    - ./mvnw --batch-mode --no-transfer-progress -Dappium.framework.version="$APPIUM_FRAMEWORK_VERSION" -Dappium.framework.repository.url="$CI_API_V4_URL/projects/$APPIUM_FRAMEWORK_PROJECT_ID/packages/maven" clean test-compile
+  artifacts:
+    when: always
+    paths:
+      - target/classes/
+      - target/test-classes/
+    expire_in: 7 days
+
+appium-runtime:
+  stage: verify
+  image: node:22-bookworm
+  cache:
+    key:
+      files:
+        - package-lock.json
+    paths:
+      - .npm/
+  variables:
+    npm_config_cache: "$CI_PROJECT_DIR/.npm"
+  script:
+    - npm ci
+    - npm run appium:drivers
+    - npm audit --audit-level=high
+  allow_failure: true

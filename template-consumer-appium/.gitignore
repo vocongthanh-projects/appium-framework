@@ -1,0 +1,12 @@
+target/
+node_modules/
+.npm/
+config-local.properties
+*.apk
+*.aab
+*.ipa
+*.xcarchive/
+*.log
+.DS_Store
+.idea/
+*.iml

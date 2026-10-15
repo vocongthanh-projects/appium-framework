@@ -1,0 +1,25 @@
+{
+  "name": "mobile-consumer-tools",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Local Appium server and mobile drivers for the consumer test template",
+  "scripts": {
+    "postinstall": "node scripts/patch-uiautomator2-dependency.mjs",
+    "appium": "appium --address 127.0.0.1 --port 4723",
+    "appium:drivers": "appium driver list --installed",
+    "doctor:android": "appium driver doctor uiautomator2",
+    "doctor:ios": "appium driver doctor xcuitest"
+  },
+  "devDependencies": {
+    "appium": "3.8.0",
+    "appium-uiautomator2-driver": "8.7.0",
+    "appium-xcuitest-driver": "12.15.2",
+    "brace-expansion": "5.0.12"
+  },
+  "overrides": {
+    "brace-expansion": "5.0.12"
+  },
+  "engines": {
+    "node": ">=20.19.0"
+  }
+}

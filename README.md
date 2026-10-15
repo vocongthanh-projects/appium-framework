@@ -11,28 +11,48 @@ appium-framework/
 └── framework-cucumber-testng/      # Cucumber world, hooks, và safe runner
 ```
 
+[`template-consumer-appium/`](template-consumer-appium/README.md) là starter project độc lập để copy thành repository consumer. Nó không nằm trong reactor và không chứa app ID hay nghiệp vụ sản phẩm. Khi copy, đổi cả Maven coordinates và Java package `vn.ots.qc.consumer.template` sang namespace dự án.
+
 ## Cài đặt (dự án consumer)
 
-Repo này không publish lên Maven Central hay registry công khai nào. Cách dùng nhanh nhất là
-clone và install vào local Maven repository của bạn:
+Framework publish các artifact lên GitLab Maven Package Registry khi pipeline trên `develop` thành công. Snapshot mới là `3.0.1-SNAPSHOT`. Project ID hiện tại là `1264`; consumer cần quyền đọc package, thêm project consumer vào job-token allowlist của framework và cấu hình `APPIUM_FRAMEWORK_PROJECT_ID=1264`.
 
-```bash
-git clone https://github.com/vocongthanh247/appium-framework.git
-cd appium-framework
-./mvnw clean install
-```
-
-Sau đó thêm dependency vào `pom.xml` của dự án consumer:
+Dependency của consumer:
 
 ```xml
-<dependency>
-    <groupId>vn.ots.qc</groupId>
-    <artifactId>framework-testng</artifactId>
-    <version>3.0.0-SNAPSHOT</version>
-    <scope>test</scope>
-</dependency>
-<!-- hoặc framework-cucumber-testng cho BDD -->
+<repositories>
+    <repository>
+        <id>appium-framework-registry</id>
+        <url>https://&lt;GITLAB_DOMAIN&gt;/api/v4/projects/&lt;PROJECT_ID&gt;/packages/maven</url>
+    </repository>
+</repositories>
+
+<dependencies>
+    <dependency>
+        <groupId>vn.ots.qc</groupId>
+        <artifactId>framework-testng</artifactId>
+        <version>3.0.1-SNAPSHOT</version>
+        <scope>test</scope>
+    </dependency>
+    <!-- hoặc framework-cucumber-testng cho BDD -->
+</dependencies>
 ```
+
+Lưu thông tin xác thực local trong `~/.m2/settings.xml` (không commit token):
+
+```xml
+<settings>
+  <servers>
+    <server>
+      <id>appium-framework-registry</id>
+      <username>YOUR_GITLAB_USERNAME_OR_TOKEN_USER</username>
+      <password>YOUR_LOCAL_READ_PACKAGE_TOKEN</password>
+    </server>
+  </servers>
+</settings>
+```
+
+`template-consumer-appium/` includes a consumer CI example using `CI_JOB_TOKEN`; the framework project must allow that consumer project in its job-token allowlist. The Appium Node runtime job reports current npm audit advisories as a non-blocking warning; Java framework verification remains required before Maven publication.
 
 ### Cấu trúc dự án consumer
 
@@ -123,7 +143,7 @@ npm audit --audit-level=high
 npm run appium:drivers
 ```
 
-`uiautomator2@8.2.2` hiện đi kèm shrinkwrap giữ lại `brace-expansion@5.0.8`. Script `postinstall` thay đúng dependency đó bằng version `5.0.9`, pin trong lockfile, sau đó CI chạy lại audit. Script fail nếu bản patch gốc không khớp version mong đợi.
+Consumer template hiện pin Appium `3.8.0`, UiAutomator2 `8.7.0`, XCUITest `12.15.2` và Node `>=20.19.0`. `npm audit` trên dependency tree Appium là cảnh báo không chặn pipeline do một số dependency lồng nhau được đóng gói sẵn; `npm audit fix` không thể thay thế mọi bản copy. Không bỏ pin hoặc nâng prerelease chỉ để làm audit xanh. Kiểm tra advisories và tương thích thiết bị khi nâng version.
 
 Unit test và contract test không kết nối tới thiết bị thật. Test end-to-end của ứng dụng thuộc về repo consumer.
 

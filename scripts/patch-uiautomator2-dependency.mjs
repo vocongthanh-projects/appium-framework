@@ -7,7 +7,7 @@ const driverRoot = join(projectRoot, "node_modules", "appium-uiautomator2-driver
 const safeDependencyRoot = join(projectRoot, "node_modules", "brace-expansion");
 const dependencyRoot = join(driverRoot, "node_modules", "brace-expansion");
 const dependencyManifest = join(dependencyRoot, "package.json");
-const safeVersion = "5.0.9";
+const safeVersion = "5.0.12";
 
 if (!existsSync(driverRoot)) {
   throw new Error("appium-uiautomator2-driver is missing; run npm ci from the project root");
