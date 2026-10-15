@@ -4,11 +4,11 @@ Starter project for a new Android/iOS test repository using the Appium Java fram
 
 ## Start from the template
 
-Copy this directory into a new repository and update the Maven coordinates in `pom.xml`. The sample is Android-configured by default. For iOS, select `platform=ios` and set the iOS bundle ID and device settings.
+Copy this directory into a new repository and update the Maven `groupId`, `artifactId`, display name, and Java package `vn.ots.qc.consumer.template` to the consumer's namespace. The starter deliberately uses an OTS template namespace rather than `com.example`. The sample is Android-configured by default. For iOS, select `platform=ios` and set the iOS bundle ID and device settings.
 
 ## Install dependencies
 
-The framework publishes its Java artifacts to the GitLab Maven Package Registry. `pom.xml` defaults to `3.0.1-SNAPSHOT`; CI reads the registry project ID from `APPIUM_FRAMEWORK_PROJECT_ID` and authenticates with `CI_JOB_TOKEN`. Add the consumer project to the framework project's job-token allowlist.
+The framework publishes its Java artifacts to the GitLab Maven Package Registry. Its current project ID is `1264`; `pom.xml` defaults to `3.0.1-SNAPSHOT`. CI reads the registry project ID from `APPIUM_FRAMEWORK_PROJECT_ID` and authenticates with `CI_JOB_TOKEN`. Set `APPIUM_FRAMEWORK_PROJECT_ID=1264` and add the consumer project to the framework project's job-token allowlist.
 
 For local registry access, create a Maven server entry in `~/.m2/settings.xml` with ID `appium-framework-registry` and credentials stored locally:
 
@@ -65,6 +65,8 @@ The TestNG smoke test only checks that Appium can create a session for the confi
 ## Add consumer screens and tests
 
 `SampleScreen` demonstrates a consumer-owned screen extending `BaseScreen`. Replace `sample.screen.title` with accessibility identifiers owned by the application. Use platform-specific `LocatorSet` candidates when Android and iOS expose different native identifiers. Tests extend `BaseMobileTest`; use `MobileTargets.PROVIDER` only when every parallel target has isolated device IDs and forwarding ports.
+
+The template CI compiles Java tests and checks the pinned Node/Appium runtime. It does not start a device test because device availability, runner tags, app artifact delivery, and iOS signing are organization-specific. Add a device-test job only after those runner details are defined; never assume a hosted generic runner has an emulator or Xcode.
 
 ## Commands
 

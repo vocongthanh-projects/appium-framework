@@ -1,4 +1,4 @@
-package com.example.mobile.tests;
+package vn.ots.qc.consumer.template.mobile.tests;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;

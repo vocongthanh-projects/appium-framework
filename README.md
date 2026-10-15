@@ -11,11 +11,11 @@ appium-framework/
 └── framework-cucumber-testng/      # Cucumber world, hooks, và safe runner
 ```
 
-`template-consumer-appium/` là starter project độc lập để copy thành repository consumer. Nó không nằm trong reactor và không chứa app ID hay nghiệp vụ sản phẩm.
+[`template-consumer-appium/`](template-consumer-appium/README.md) là starter project độc lập để copy thành repository consumer. Nó không nằm trong reactor và không chứa app ID hay nghiệp vụ sản phẩm. Khi copy, đổi cả Maven coordinates và Java package `vn.ots.qc.consumer.template` sang namespace dự án.
 
 ## Cài đặt (dự án consumer)
 
-Framework publish các artifact lên GitLab Maven Package Registry khi pipeline trên `develop` thành công. Snapshot mới là `3.0.1-SNAPSHOT`. Consumer cần quyền đọc package; trong CI, thêm project consumer vào job-token allowlist của framework và cấu hình `APPIUM_FRAMEWORK_PROJECT_ID`.
+Framework publish các artifact lên GitLab Maven Package Registry khi pipeline trên `develop` thành công. Snapshot mới là `3.0.1-SNAPSHOT`. Project ID hiện tại là `1264`; consumer cần quyền đọc package, thêm project consumer vào job-token allowlist của framework và cấu hình `APPIUM_FRAMEWORK_PROJECT_ID=1264`.
 
 Dependency của consumer:
 
@@ -143,7 +143,7 @@ npm audit --audit-level=high
 npm run appium:drivers
 ```
 
-`uiautomator2@8.2.2` hiện đi kèm shrinkwrap giữ lại `brace-expansion@5.0.8`. Script `postinstall` thay đúng dependency đó bằng version `5.0.9`, pin trong lockfile, sau đó CI chạy lại audit. Script fail nếu bản patch gốc không khớp version mong đợi.
+Consumer template hiện pin Appium `3.8.0`, UiAutomator2 `8.7.0`, XCUITest `12.15.2` và Node `>=20.19.0`. `npm audit` trên dependency tree Appium là cảnh báo không chặn pipeline do một số dependency lồng nhau được đóng gói sẵn; `npm audit fix` không thể thay thế mọi bản copy. Không bỏ pin hoặc nâng prerelease chỉ để làm audit xanh. Kiểm tra advisories và tương thích thiết bị khi nâng version.
 
 Unit test và contract test không kết nối tới thiết bị thật. Test end-to-end của ứng dụng thuộc về repo consumer.
 
