@@ -30,7 +30,7 @@ Then run:
 ./mvnw -Dappium.framework.repository.url=https://<GITLAB_DOMAIN>/api/v4/projects/<PROJECT_ID>/packages/maven clean test-compile
 ```
 
-Use a released version for stable consumer CI when one is available. `3.0.1-SNAPSHOT` tracks the framework's development branch. In CI, set `APPIUM_FRAMEWORK_PROJECT_ID` and allow the consumer project's job token in the framework project's CI/CD job-token allowlist. For local framework development, `cd ../appium-framework && ./mvnw clean install`, then return to this directory and run `./mvnw clean test-compile`.
+Use a released version for stable consumer CI when one is available. `3.0.1-SNAPSHOT` tracks the framework's development branch. In CI, set `APPIUM_FRAMEWORK_PROJECT_ID` and allow the consumer project's job token in the framework project's CI/CD job-token allowlist. For local framework development, `cd ../framework-appium && ./mvnw clean install`, then return to this directory and run `./mvnw clean test-compile`.
 
 The Appium server and platform drivers are a separate Node.js runtime. In the copied consumer repository, install and run them with:
 
@@ -66,7 +66,7 @@ The TestNG smoke test only checks that Appium can create a session for the confi
 
 `SampleScreen` demonstrates a consumer-owned screen extending `BaseScreen`. Replace `sample.screen.title` with accessibility identifiers owned by the application. Use platform-specific `LocatorSet` candidates when Android and iOS expose different native identifiers. Tests extend `BaseMobileTest`; use `MobileTargets.PROVIDER` only when every parallel target has isolated device IDs and forwarding ports.
 
-The template CI compiles Java tests and checks the pinned Node/Appium runtime. It does not start a device test because device availability, runner tags, app artifact delivery, and iOS signing are organization-specific. Add a device-test job only after those runner details are defined; never assume a hosted generic runner has an emulator or Xcode.
+The source CI compiles Java tests and checks the pinned Node/Appium runtime. It does not start a device test because device availability, runner tags, app artifact delivery, and iOS signing are organization-specific. Put device-test jobs in the dedicated test infrastructure project; never assume a hosted generic runner has an emulator or Xcode.
 
 ## Commands
 

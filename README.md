@@ -5,7 +5,7 @@ Framework Appium 3 có thể tái sử dụng cho Android và iOS. Repo này ch�
 ## Module
 
 ```text
-appium-framework/
+framework-appium/
 ├── framework-core/                 # cấu hình, driver, locator, action, gesture, evidence
 ├── framework-testng/               # lifecycle TestNG, độc lập với Cucumber
 └── framework-cucumber-testng/      # Cucumber world, hooks, và safe runner
