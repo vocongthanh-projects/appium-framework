@@ -7,6 +7,7 @@ workflow:
 stages:
   - verify
   - deploy
+  - notify
 
 java-contracts:
   stage: verify
@@ -71,3 +72,35 @@ deploy:
         ./mvnw --batch-mode --no-transfer-progress versions:set -DnewVersion="$RELEASE_VERSION" -DprocessAllModules=true -DgenerateBackupPoms=false
       fi
     - ./mvnw --batch-mode --no-transfer-progress deploy -DskipTests -s ci_settings.xml
+
+telegram-success:
+  stage: notify
+  image: python:3.12-slim
+  when: on_success
+  variables:
+    TELEGRAM_CHAT_ID: "$TELEGRAM_CHAT_GITLAB_OTS_FLI"
+    TELEGRAM_THREAD_ID: "$TELEGRAM_THREAD_GITLAB_OTS_FLI"
+    TELEGRAM_STATUS: "success"
+  script:
+    - python3 scripts/notify_telegram.py
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "develop" && $TELEGRAM_BOT_TOKEN && $TELEGRAM_CHAT_GITLAB_OTS_FLI && $TELEGRAM_THREAD_GITLAB_OTS_FLI'
+      when: on_success
+    - when: never
+  allow_failure: true
+
+telegram-failure:
+  stage: notify
+  image: python:3.12-slim
+  when: on_failure
+  variables:
+    TELEGRAM_CHAT_ID: "$TELEGRAM_CHAT_GITLAB_OTS_FLI"
+    TELEGRAM_THREAD_ID: "$TELEGRAM_THREAD_GITLAB_OTS_FLI"
+    TELEGRAM_STATUS: "failed"
+  script:
+    - python3 scripts/notify_telegram.py
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "develop" && $TELEGRAM_BOT_TOKEN && $TELEGRAM_CHAT_GITLAB_OTS_FLI && $TELEGRAM_THREAD_GITLAB_OTS_FLI'
+      when: on_failure
+    - when: never
+  allow_failure: true
