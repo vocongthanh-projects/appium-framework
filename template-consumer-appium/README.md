@@ -8,7 +8,7 @@ Copy this directory into a new repository and update the Maven `groupId`, `artif
 
 ## Install dependencies
 
-The framework publishes its Java artifacts to the GitLab Maven Package Registry. Its current project ID is `1264`; `pom.xml` defaults to `3.0.1-SNAPSHOT`. CI reads the registry project ID from `APPIUM_FRAMEWORK_PROJECT_ID` and authenticates with `CI_JOB_TOKEN`. Set `APPIUM_FRAMEWORK_PROJECT_ID=1264` and add the consumer project to the framework project's job-token allowlist.
+The framework source pipeline compiles the Java modules but does not publish Maven artifacts. `pom.xml` defaults to `3.0.1-SNAPSHOT`; use this dependency after that version is published to the GitLab Maven Package Registry. Set `APPIUM_FRAMEWORK_PROJECT_ID` to the registry project's ID and add the consumer project to the framework project's job-token allowlist; CI authenticates with `CI_JOB_TOKEN`.
 
 For local registry access, create a Maven server entry in `~/.m2/settings.xml` with ID `appium-framework-registry` and credentials stored locally:
 
@@ -64,7 +64,7 @@ The TestNG smoke test only checks that Appium can create a session for the confi
 
 ## Add consumer screens and tests
 
-`SampleScreen` demonstrates a consumer-owned screen extending `BaseScreen`. Replace `sample.screen.title` with accessibility identifiers owned by the application. Use platform-specific `LocatorSet` candidates when Android and iOS expose different native identifiers. Tests extend `BaseMobileTest`; use `MobileTargets.PROVIDER` only when every parallel target has isolated device IDs and forwarding ports.
+`SampleScreen` demonstrates a consumer-owned screen extending `BaseScreen` under `features/sample/screens/`. Replace `sample.screen.title` with accessibility identifiers owned by the application. Use platform-specific `LocatorSet` candidates when Android and iOS expose different native identifiers. Keep tests under the same feature. Tests extend `BaseMobileTest`; use `MobileTargets.PROVIDER` only when every parallel target has isolated device IDs and forwarding ports.
 
 The source CI compiles Java tests and checks the pinned Node/Appium runtime. It does not start a device test because device availability, runner tags, app artifact delivery, and iOS signing are organization-specific. Put device-test jobs in the dedicated test infrastructure project; never assume a hosted generic runner has an emulator or Xcode.
 

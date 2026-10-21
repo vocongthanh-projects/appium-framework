@@ -1,4 +1,4 @@
-package vn.ots.qc.consumer.template.mobile.screens;
+package vn.ots.qc.consumer.template.mobile.features.sample.screens;
 
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.AppiumBy;

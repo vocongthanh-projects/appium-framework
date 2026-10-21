@@ -1,5 +1,8 @@
 # Appium Automation Framework
 
+
+> Maven namespace migration: this source tree now uses `vn.ots.qc.mobile` for its shared Android/iOS artifacts. Existing published artifacts under `vn.ots.qc` are not relocated; consumers must update their dependency group IDs when using a package published from this source state.
+
 Framework Appium 3 có thể tái sử dụng cho Android và iOS. Repo này chỉ chứa hạ tầng automation mobile; screen, locator, step, feature, credential, và test data của ứng dụng thuộc về consumer.
 
 ## Module
@@ -15,7 +18,7 @@ framework-appium/
 
 ## Cài đặt (dự án consumer)
 
-Framework publish các artifact lên GitLab Maven Package Registry khi pipeline trên `develop` thành công. Snapshot mới là `3.0.1-SNAPSHOT`. Project ID hiện tại là `1264`; consumer cần quyền đọc package, thêm project consumer vào job-token allowlist của framework và cấu hình `APPIUM_FRAMEWORK_PROJECT_ID=1264`.
+Source pipeline hiện chỉ compile/verify framework và kiểm tra runtime Node; nó không publish Maven artifact. Version source hiện tại là `3.0.1-SNAPSHOT`. Khi một artifact đã được publish vào GitLab Maven Package Registry, consumer cần quyền đọc package, thêm project consumer vào job-token allowlist của framework và cấu hình project ID registry tương ứng trong CI.
 
 Dependency của consumer:
 
@@ -29,7 +32,7 @@ Dependency của consumer:
 
 <dependencies>
     <dependency>
-        <groupId>vn.ots.qc</groupId>
+        <groupId>vn.ots.qc.mobile</groupId>
         <artifactId>framework-testng</artifactId>
         <version>3.0.1-SNAPSHOT</version>
         <scope>test</scope>
@@ -61,14 +64,21 @@ Framework không đóng gói sẵn screen, step, hay feature nào — đó là l
 ```text
 your-app-repo/
 ├── src/test/java/com/yourcompany/
-│   ├── screens/            # screen object, giữ các hằng số MobileLocator
-│   └── tests/               # TestNG test, extend BaseMobileTest
+│   ├── config/              # cấu hình app/device của consumer
+│   ├── shared/              # helper thật sự dùng chung giữa các feature
+│   └── features/
+│       └── <feature>/
+│           ├── screens/     # screen object và MobileLocator của feature
+│           ├── components/  # vùng UI tái sử dụng nếu cần
+│           └── tests/       # TestNG test của feature
 ├── src/test/resources/
 │   ├── config/
 │   │   └── application.properties   # platform, device, Appium server, app package/bundle id
-│   └── features/            # *.feature, nếu dùng framework-cucumber-testng
+│   └── features/<feature>/  # *.feature, nếu dùng framework-cucumber-testng
 └── pom.xml
 ```
+
+Không nhân đôi toàn bộ cấu trúc theo Android và iOS. Dùng locator candidates riêng cho từng nền tảng khi cùng một màn hình/control có identifier khác; tạo screen implementation riêng chỉ khi luồng hoặc thành phần UI thực sự khác nhau.
 
 ## Locator động xuyên nền tảng (dynamic cross-platform locators)
 

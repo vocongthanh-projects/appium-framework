@@ -19,7 +19,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>vn.ots.qc</groupId>
+            <groupId>vn.ots.qc.mobile</groupId>
             <artifactId>framework-testng</artifactId>
             <version>${appium.framework.version}</version>
             <scope>test</scope>
