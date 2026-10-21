@@ -4,7 +4,7 @@ This repository contains reusable Appium infrastructure for Android and iOS. The
 
 ## Before changing files
 
-- Read this file, `README.md`, [consumer source layout](docs/CONSUMER_SOURCE_LAYOUT.md), and the relevant module documentation.
+- Read this file, `README.md`, [framework source layout](docs/FRAMEWORK_SOURCE_LAYOUT.md), [consumer source layout](docs/CONSUMER_SOURCE_LAYOUT.md), and the relevant module documentation.
 - Keep Android- and iOS-specific capabilities explicit in configuration and platform-specific code. Do not infer that a shared framework must be split into separate artifacts by operating system; follow the existing module and Maven coordinates.
 - Treat the existing framework and consumer boundary as authoritative. Add a capability to the framework only when it is reusable across products.
 - Group framework source by reusable mobile capability inside the existing Maven modules and mirror production packages in contract tests. Keep consumer screens, app models, app identifiers, and workflows in consumer repositories. Group them by `portal/application → module`; use `screens/components/tests` vocabulary and do not invent API service packages for UI code.

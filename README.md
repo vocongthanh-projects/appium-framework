@@ -5,6 +5,8 @@
 
 Framework Appium 3 có thể tái sử dụng cho Android và iOS. Repo này chỉ chứa hạ tầng automation mobile; screen, locator, step, feature, credential, và test data của ứng dụng thuộc về consumer.
 
+Quy tắc tổ chức source dùng chung với các framework automation khác nằm trong [Framework Source Layout](docs/FRAMEWORK_SOURCE_LAYOUT.md). Các module Maven hiện tại được giữ theo capability mobile và adapter tương ứng.
+
 ## Module
 
 ```text
