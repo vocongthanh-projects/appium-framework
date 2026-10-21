@@ -7,6 +7,7 @@ This repository contains reusable Appium infrastructure for Android and iOS. The
 - Read this file, `README.md`, and the relevant module documentation.
 - Keep Android- and iOS-specific capabilities explicit in configuration and platform-specific code. Do not infer that a shared framework must be split into separate artifacts by operating system; follow the existing module and Maven coordinates.
 - Treat the existing framework and consumer boundary as authoritative. Add a capability to the framework only when it is reusable across products.
+- Group framework source by reusable mobile capability inside the existing Maven modules and mirror production packages in contract tests. Keep consumer screens, app models, app identifiers, and workflows in consumer repositories, grouped by feature.
 - Preserve existing package and artifact coordinates unless the task explicitly asks to change them.
 
 ## OTS/FLI CI boundary
