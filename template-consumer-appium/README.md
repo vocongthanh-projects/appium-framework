@@ -64,7 +64,7 @@ The TestNG smoke test only checks that Appium can create a session for the confi
 
 ## Add consumer screens and tests
 
-`SampleScreen` demonstrates a consumer-owned screen extending `BaseScreen` under `features/sample/screens/`. Replace `sample.screen.title` with accessibility identifiers owned by the application. Use platform-specific `LocatorSet` candidates when Android and iOS expose different native identifiers. Keep tests under the same feature. Tests extend `BaseMobileTest`; use `MobileTargets.PROVIDER` only when every parallel target has isolated device IDs and forwarding ports.
+`SampleScreen` demonstrates a consumer-owned screen extending `BaseScreen` under `portals/sample/modules/home/screens/`. Replace `sample.screen.title` with accessibility identifiers owned by the application. Use platform-specific `LocatorSet` candidates when Android and iOS expose different native identifiers. Keep tests under the same module at `portals/sample/modules/home/tests/`. Read [Consumer Source Layout](../docs/CONSUMER_SOURCE_LAYOUT.md) for the shared portal/module ownership rule and stack-specific names. Tests extend `BaseMobileTest`; use `MobileTargets.PROVIDER` only when every parallel target has isolated device IDs and forwarding ports.
 
 The source CI compiles Java tests and checks the pinned Node/Appium runtime. It does not start a device test because device availability, runner tags, app artifact delivery, and iOS signing are organization-specific. Put device-test jobs in the dedicated test infrastructure project; never assume a hosted generic runner has an emulator or Xcode.
 

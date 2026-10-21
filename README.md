@@ -57,29 +57,23 @@ Lưu thông tin xác thực local trong `~/.m2/settings.xml` (không commit toke
 
 `template-consumer-appium/` includes a consumer CI example using `CI_JOB_TOKEN`; the framework project must allow that consumer project in its job-token allowlist. The Appium Node runtime job reports current npm audit advisories as a non-blocking warning; Java framework verification remains required before Maven publication.
 
-### Cấu trúc dự án consumer
+### Cấu trúc source consumer
 
-Framework không đóng gói sẵn screen, step, hay feature nào — đó là layout riêng của consumer:
+Consumer gom màn hình và bài kiểm thử theo cùng portal/module; Android/iOS khác nhau ở locator hoặc implementation khi hành vi thực sự khác, không phải ở cách nhân đôi toàn bộ cây source. Quy tắc chung và các ví dụ theo stack nằm ở [Consumer Source Layout](docs/CONSUMER_SOURCE_LAYOUT.md).
 
 ```text
-your-app-repo/
-├── src/test/java/com/yourcompany/
-│   ├── config/              # cấu hình app/device của consumer
-│   ├── shared/              # helper thật sự dùng chung giữa các feature
-│   └── features/
-│       └── <feature>/
-│           ├── screens/     # screen object và MobileLocator của feature
-│           ├── components/  # vùng UI tái sử dụng nếu cần
-│           └── tests/       # TestNG test của feature
-├── src/test/resources/
-│   ├── config/
-│   │   └── application.properties   # platform, device, Appium server, app package/bundle id
-│   └── features/<feature>/  # *.feature, nếu dùng framework-cucumber-testng
-└── pom.xml
+src/test/java/<package_root>/
+├── base/ config/ data/                         # hạ tầng consumer
+├── portals/<app>/modules/<module>/
+│   ├── screens/                                # screen objects và logical locators
+│   ├── components/                             # vùng UI tái sử dụng nếu cần
+│   └── tests/                                  # TestNG suite theo feature
+└── workflows/<workflow>/tests/                # hành trình qua nhiều module
+
+src/test/resources/features/<portal>/<module>/     # file Cucumber tùy chọn
 ```
 
-Không nhân đôi toàn bộ cấu trúc theo Android và iOS. Dùng locator candidates riêng cho từng nền tảng khi cùng một màn hình/control có identifier khác; tạo screen implementation riêng chỉ khi luồng hoặc thành phần UI thực sự khác nhau.
-
+Không tạo service package cho UI nếu không có API client. Với cùng một control trên Android/iOS, khai báo candidate theo nền tảng; chỉ tách screen khi flow hoặc cấu trúc UI khác thực sự.
 ## Locator động xuyên nền tảng (dynamic cross-platform locators)
 
 ```java

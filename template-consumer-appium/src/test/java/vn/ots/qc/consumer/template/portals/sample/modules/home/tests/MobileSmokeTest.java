@@ -1,4 +1,4 @@
-package vn.ots.qc.consumer.template.mobile.features.sample.tests;
+package vn.ots.qc.consumer.template.portals.sample.modules.home.tests;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;

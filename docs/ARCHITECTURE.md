@@ -16,19 +16,17 @@ Core contains no application screen or Cucumber/TestNG runtime. The consumer own
 
 The shared framework is grouped by reusable capability (`config`, `device`, `driver`, `evidence`, `interaction`, `locator`, `screen`). This is appropriate while the code implements platform-neutral lifecycle and actions. Android/iOS differences belong behind explicit platform-specific adapters or packages only when behavior or dependencies actually differ; do not duplicate the entire shared package tree or split Maven artifacts merely by operating system.
 
-Consumer repositories group screens, components, and tests by application feature. A screen may use one logical locator with Android/iOS candidates when it represents the same control; genuinely different flows can use explicit platform-specific screen implementations. Application IDs, screen selectors, and business workflows stay in the consumer.
+Consumer repositories group screen objects and scenarios by portal/application and feature module. This mirrors the shared ownership model while keeping mobile-specific names (`screens`, optional `components`) instead of API `client/model` packages. Android/iOS differences stay in locator candidates or explicit implementations only where behavior differs. See [Consumer Source Layout](CONSUMER_SOURCE_LAYOUT.md).
 
 ```text
 src/test/java/<package_root>/
-├── config/                         # consumer/device configuration
-├── shared/                         # consumer-wide helpers
-└── features/<feature>/
-    ├── screens/                    # screen objects
-    ├── components/                 # reusable screen regions, when needed
-    └── tests/                      # TestNG suites for feature behavior
-src/test/resources/features/<feature>/  # optional Cucumber feature files
+├── base/ config/ data/
+├── portals/<app>/modules/<module>/{screens,components,tests}/
+└── workflows/<workflow>/tests/
+src/test/resources/features/<portal>/<module>/  # optional Cucumber files
 ```
 
+App identifiers, screen selectors, and business workflows stay in the consumer.
 ## Locator and action pipeline
 
 ```text
